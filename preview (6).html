@@ -1,0 +1,5444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Singapore Way | Transformation Pressure Test</title>
+  <meta name="description" content="A 7-minute diagnostic for transformation operators, built from The Singapore Way." />
+  <style>
+    :root{
+      --shadow-grey:#272727ff;
+      --silver:#a3a3a3ff;
+      --alabaster-grey:#e5e5e5ff;
+      --red:#ff0000ff;
+      --brick-ember:#cc0000ff;
+      --white:#ffffff;
+      --ink:#111111;
+      --muted:#5f5f5f;
+      --line:#d9d9d9;
+      --soft:#f6f6f6;
+      --soft-red:#fff2f2;
+      --ring:rgba(204,0,0,.16);
+      --shadow:0 28px 80px rgba(39,39,39,.16);
+      --shadow-card:0 14px 38px rgba(39,39,39,.12);
+      --font:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+      font-family:var(--font);
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 14% 8%, rgba(255,0,0,.11), transparent 30%),
+        radial-gradient(circle at 84% 92%, rgba(204,0,0,.09), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    *{ box-sizing:border-box; }
+
+    a{ color:inherit; }
+
+    button, input{
+      font:inherit;
+    }
+
+    .tsw-tool{
+      width:100%;
+      min-height:100vh;
+      padding:10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .tsw-tool.is-result-mode{
+      align-items:flex-start;
+      padding:8px;
+    }
+
+    .shell{
+      width:min(900px, 100%);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:34px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+      backdrop-filter:blur(10px);
+    }
+
+    .shell.is-result{
+      width:min(1510px, calc(100vw - 24px));
+      border-radius:18px;
+    }
+
+    .shell.is-result::before{
+      display:none;
+    }
+
+    .shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(229,229,229,.2));
+      z-index:0;
+    }
+
+    .screen{
+      display:none;
+      position:relative;
+      z-index:1;
+    }
+
+    .screen.active{ display:block; }
+    .hidden{ display:none !important; }
+
+    .landing-card{
+      display:block;
+      max-width:920px;
+      margin:0 auto;
+      min-height:0;
+      padding:12px 18px 18px;
+    }
+
+    .landing-progress{
+      height:6px;
+      background:#edf0f5;
+      border-radius:999px;
+      overflow:hidden;
+      margin:0 0 12px;
+    }
+
+    .landing-progress span{
+      display:block;
+      width:0;
+      height:100%;
+      background:linear-gradient(135deg, var(--red), var(--brick-ember));
+      border-radius:999px;
+    }
+
+    .hero-panel{
+      position:relative;
+      overflow:hidden;
+      min-height:0;
+      aspect-ratio:16 / 6.2;
+      max-height:310px;
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:24px;
+      background:#f4f4f4;
+      margin:0 0 14px;
+      box-shadow:0 12px 28px rgba(39,39,39,.08);
+    }
+
+    .hero-panel img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(.96) contrast(1.02);
+    }
+
+    .hero-panel::after{
+      display:none;
+    }
+
+    .hero-caption{
+      position:absolute;
+      left:28px;
+      right:28px;
+      bottom:28px;
+      color:#fff;
+      z-index:1;
+    }
+
+    .hero-caption .mini{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.78);
+    }
+
+    .hero-caption .mini::before{
+      content:"";
+      width:24px;
+      height:2px;
+      border-radius:999px;
+      background:var(--red);
+    }
+
+    .hero-caption p{
+      max-width:38ch;
+      margin:12px 0 0;
+      line-height:1.55;
+      color:rgba(255,255,255,.82);
+      font-size:14px;
+    }
+
+    .content-panel{
+      max-width:760px;
+      margin:0 auto;
+      padding:0 0 4px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .narrow-panel{
+      max-width:760px;
+      margin:0 auto;
+      padding:24px 28px 26px;
+    }
+
+    .result-panel{
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding:0;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      gap:8px;
+      padding:7px 10px;
+      border:1px solid rgba(204,0,0,.18);
+      border-radius:999px;
+      background:var(--soft-red);
+      color:var(--brick-ember);
+      font-size:11px;
+      font-weight:850;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:16px;
+    }
+
+    h1, h2, h3, p{
+      margin-top:0;
+    }
+
+    .title{
+      margin:0;
+      font-size:clamp(1.8rem, 3.4vw, 2.45rem);
+      line-height:1.04;
+      letter-spacing:-.045em;
+      color:var(--shadow-grey);
+    }
+
+    .screen-title{
+      margin:0;
+      font-size:clamp(1.8rem, 3.3vw, 2.55rem);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      color:var(--shadow-grey);
+    }
+
+    .section-title{
+      margin:0;
+      font-size:clamp(1.45rem, 2.8vw, 2.15rem);
+      line-height:1.08;
+      letter-spacing:-.04em;
+      color:var(--shadow-grey);
+    }
+
+    .body-copy{
+      margin:12px 0 0;
+      color:var(--muted);
+      line-height:1.58;
+      font-size:15px;
+      max-width:62ch;
+    }
+
+    .micro-copy{
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    .form-grid{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .landing-action-row{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap:10px;
+      align-items:center;
+      margin-top:14px;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.82);
+      box-shadow:0 10px 24px rgba(39,39,39,.06);
+    }
+
+    .landing-action-row .field{
+      border-color:transparent;
+      background:#f8f8f8;
+      box-shadow:inset 0 0 0 1px rgba(39,39,39,.06);
+    }
+
+    .landing-action-row .btn{
+      min-width:156px;
+      border-radius:13px;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .field-label{
+      display:block;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--shadow-grey);
+      margin:0 0 7px;
+    }
+
+    .field{
+      width:100%;
+      min-height:46px;
+      padding:12px 14px;
+      border:1px solid rgba(39,39,39,.16);
+      border-radius:16px;
+      background:#fff;
+      color:var(--shadow-grey);
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .field:focus{
+      border-color:var(--brick-ember);
+      box-shadow:0 0 0 5px var(--ring);
+      background:#fff;
+    }
+
+    .btn{
+      appearance:none;
+      min-height:46px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 18px;
+      border:0;
+      border-radius:13px;
+      cursor:pointer;
+      text-decoration:none;
+      font-weight:850;
+      letter-spacing:-.01em;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease, background .18s ease;
+      user-select:none;
+    }
+
+    .btn:hover{ transform:translateY(-1px); }
+    .btn:active{ transform:translateY(0); }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
+
+    .btn.primary{
+      background:linear-gradient(135deg, var(--red), var(--brick-ember));
+      color:#fff;
+      box-shadow:0 14px 26px rgba(204,0,0,.23);
+    }
+
+    .btn.secondary{
+      background:#fff;
+      color:var(--shadow-grey);
+      border:1px solid rgba(39,39,39,.16);
+      box-shadow:0 8px 18px rgba(39,39,39,.06);
+    }
+
+    .btn.ghost{
+      min-height:42px;
+      padding:10px 12px;
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(39,39,39,.12);
+      box-shadow:none;
+      font-weight:750;
+    }
+
+    .btn.full{ width:100%; }
+
+    .progress-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:14px;
+    }
+
+    .progress-pill{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      padding:7px 11px;
+      border-radius:999px;
+      background:var(--soft-red);
+      color:var(--brick-ember);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .helper-note{
+      color:var(--muted);
+      font-size:13px;
+      font-style:italic;
+      text-align:right;
+    }
+
+    .progress-track{
+      height:6px;
+      background:#eeeeee;
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:14px;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--red), var(--brick-ember));
+      transition:width .28s ease;
+    }
+
+    .transition-line{
+      padding:10px 12px;
+      border-left:3px solid var(--brick-ember);
+      background:linear-gradient(90deg, var(--soft-red), transparent);
+      color:var(--shadow-grey);
+      font-size:14px;
+      line-height:1.5;
+      border-radius:12px;
+      margin:0 0 12px;
+      font-style:italic;
+    }
+
+    .question-card{
+      background:#fff;
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:20px;
+      box-shadow:var(--shadow-card);
+      padding:18px;
+    }
+
+    @media (min-width: 861px){
+      .question-card{
+        display:grid;
+        grid-template-columns:minmax(0, .9fr) minmax(310px, 1.1fr);
+        column-gap:18px;
+        align-items:start;
+      }
+
+      .question-title,
+      .question-card > .micro-copy,
+      .question-media{
+        grid-column:1;
+      }
+
+      .question-card > .options,
+      .question-card > .form-grid{
+        grid-column:2;
+        grid-row:1 / span 4;
+        margin-top:0;
+      }
+
+      .question-card > .question-actions{
+        grid-column:2;
+      }
+    }
+
+    .question-title{
+      margin:0;
+      font-size:clamp(1.35rem, 2.4vw, 2rem);
+      line-height:1.12;
+      letter-spacing:-.04em;
+      color:var(--shadow-grey);
+    }
+
+    .options{
+      display:grid;
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .option-btn{
+      width:100%;
+      min-height:50px;
+      border:1px solid rgba(39,39,39,.15);
+      border-radius:14px;
+      padding:11px 14px;
+      display:grid;
+      grid-template-columns:32px 1fr;
+      gap:12px;
+      align-items:center;
+      text-align:left;
+      background:#fff;
+      color:var(--shadow-grey);
+      cursor:pointer;
+      transition:border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+
+    .option-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(204,0,0,.45);
+      box-shadow:0 10px 20px rgba(39,39,39,.07);
+      background:#fffafa;
+    }
+
+    .option-btn.selected{
+      border-color:var(--brick-ember);
+      background:var(--soft-red);
+      box-shadow:0 0 0 5px var(--ring);
+    }
+
+    .option-index{
+      width:32px;
+      height:32px;
+      border-radius:11px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--soft);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .option-btn.selected .option-index{
+      background:var(--brick-ember);
+      color:#fff;
+    }
+
+    .option-text{
+      line-height:1.42;
+      font-weight:690;
+    }
+
+    .question-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .msg{
+      min-height:20px;
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+
+    .msg.error{ color:#9f1239; }
+    .msg.success{ color:#166534; }
+
+    .consent-row{
+      display:grid;
+      grid-template-columns:20px 1fr;
+      gap:10px;
+      align-items:start;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .consent-row input{
+      width:18px;
+      height:18px;
+      margin-top:1px;
+      accent-color:var(--brick-ember);
+    }
+
+    .gate-card{
+      background:#fff;
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:22px;
+      box-shadow:var(--shadow-card);
+      padding:22px;
+    }
+
+    .bottleneck-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin:12px 0 0;
+      padding:8px 11px;
+      border-radius:999px;
+      background:var(--soft-red);
+      color:var(--brick-ember);
+      font-size:13px;
+      font-weight:850;
+    }
+
+    .calc-card{
+      max-width:720px;
+      margin:0 auto;
+      padding:36px 28px 34px;
+      text-align:center;
+    }
+
+    .calc-box{
+      margin:18px auto 0;
+      padding:20px;
+      border-radius:20px;
+      background:#fff;
+      border:1px solid rgba(39,39,39,.12);
+      box-shadow:var(--shadow-card);
+      text-align:left;
+    }
+
+    .calc-line{
+      opacity:0;
+      transform:translateY(6px);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 0;
+      color:var(--shadow-grey);
+      border-bottom:1px solid #eeeeee;
+      transition:opacity .35s ease, transform .35s ease;
+    }
+
+    .calc-line:last-child{ border-bottom:0; }
+    .calc-line.show{ opacity:1; transform:translateY(0); }
+
+    .dot{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:var(--brick-ember);
+      box-shadow:0 0 0 5px rgba(204,0,0,.1);
+      flex:0 0 auto;
+    }
+
+    .result-hero{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 340px;
+      gap:18px;
+      align-items:stretch;
+      margin-bottom:18px;
+    }
+
+    .result-card,
+    .insight-card,
+    .dynamic-card,
+    .soft-close,
+    .band-card{
+      background:#fff;
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:28px;
+      box-shadow:var(--shadow-card);
+      padding:28px;
+    }
+
+    .score-card{
+      background:linear-gradient(135deg, var(--shadow-grey), #080808);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;
+      box-shadow:var(--shadow-card);
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:280px;
+    }
+
+    .score-number{
+      font-size:clamp(3.2rem, 7vw, 5.6rem);
+      line-height:.9;
+      letter-spacing:-.08em;
+      font-weight:920;
+    }
+
+    .score-number span{
+      font-size:.26em;
+      letter-spacing:-.02em;
+      color:rgba(255,255,255,.62);
+    }
+
+    .score-label{
+      margin:10px 0 0;
+      color:rgba(255,255,255,.72);
+      line-height:1.48;
+      font-size:14px;
+    }
+
+    .metric-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .metric{
+      padding:13px;
+      border-radius:18px;
+      background:#f8f8f8;
+      border:1px solid #eeeeee;
+    }
+
+    .metric .label{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      font-weight:850;
+      margin-bottom:6px;
+    }
+
+    .metric .value{
+      display:block;
+      color:var(--shadow-grey);
+      font-weight:850;
+      line-height:1.28;
+    }
+
+    .result-subline{
+      margin:18px 0 0;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .result-subline strong{ color:var(--shadow-grey); }
+
+    .pillar-meters{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .pillar-meter{
+      display:grid;
+      grid-template-columns:minmax(160px, 1fr) 58px;
+      gap:12px;
+      align-items:center;
+    }
+
+    .pillar-meter strong{
+      display:block;
+      color:var(--shadow-grey);
+      font-size:13px;
+      line-height:1.25;
+    }
+
+    .pillar-score{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      text-align:right;
+    }
+
+    .meter-track{
+      grid-column:1 / -1;
+      height:8px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#eeeeee;
+      margin-top:-4px;
+    }
+
+    .meter-fill{
+      display:block;
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg, var(--red), var(--brick-ember));
+      border-radius:999px;
+    }
+
+    .analysis-note{
+      margin-top:16px;
+      padding:14px 15px;
+      border-radius:18px;
+      background:var(--soft-red);
+      border:1px solid rgba(204,0,0,.14);
+      color:var(--shadow-grey);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .band-card{
+      margin-top:18px;
+      border-left:4px solid var(--brick-ember);
+    }
+
+    .band-card p{
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.62;
+    }
+
+    .dynamic-card{
+      margin-top:18px;
+    }
+
+    .diagnosis{
+      margin:18px 0 0;
+      color:var(--muted);
+      line-height:1.68;
+      font-size:16px;
+    }
+
+    .moves{
+      margin:14px 0 0;
+      padding-left:22px;
+      color:var(--shadow-grey);
+      line-height:1.62;
+    }
+
+    .moves li{ margin:7px 0; }
+
+    .resource-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .resource-card{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding:18px;
+      border-radius:22px;
+      background:#fbfbfb;
+      border:1px solid rgba(39,39,39,.12);
+      min-height:100%;
+    }
+
+    .resource-card .label{
+      color:var(--brick-ember);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .resource-card h3{
+      margin:0;
+      color:var(--shadow-grey);
+      line-height:1.18;
+      font-size:1.05rem;
+      letter-spacing:-.02em;
+    }
+
+    .resource-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .resource-card .btn{
+      margin-top:auto;
+    }
+
+    .chapter-card{
+      margin-top:14px;
+      padding:20px;
+      border-radius:24px;
+      background:linear-gradient(135deg, var(--shadow-grey), #090909);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .chapter-card h3{
+      margin:0;
+      font-size:1.15rem;
+      letter-spacing:-.02em;
+      line-height:1.22;
+    }
+
+    .chapter-card p{
+      margin:12px 0 0;
+      color:rgba(255,255,255,.74);
+      line-height:1.65;
+    }
+
+    .chapter-card .btn{
+      margin-top:18px;
+    }
+
+    .soft-close{
+      margin-top:18px;
+    }
+
+    .soft-close p{
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .bonus-list{
+      margin:14px 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:6px;
+      color:var(--shadow-grey);
+      font-weight:760;
+    }
+
+    .bonus-list li::before{
+      content:"— ";
+      color:var(--brick-ember);
+    }
+
+    .result-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .footer-note{
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .brand-strip{ display:none !important; }
+
+    .visually-hidden{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+
+
+    .question-media{
+      position:relative;
+      width:100%;
+      overflow:hidden;
+      border:1px solid rgba(39,39,39,.12);
+      border-radius:16px;
+      background:#f4f4f4;
+      margin-top:12px;
+      box-shadow:0 10px 24px rgba(39,39,39,.07);
+    }
+
+    .question-media::before{
+      content:"";
+      display:block;
+      padding-top:34%;
+    }
+
+    .question-media img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(.96) contrast(1.02);
+    }
+
+    .assessment-ui{
+      background:#f8fafc;
+      min-height:720px;
+      color:#101525;
+    }
+
+    .assessment-topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:14px 16px;
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:18px;
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+      margin-bottom:14px;
+    }
+
+    .assessment-brand,
+    .assessment-crumbs,
+    .assessment-user{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .assessment-mark{
+      width:28px;
+      height:28px;
+      border-radius:8px;
+      border:5px solid var(--red);
+      transform:rotate(30deg);
+      flex:0 0 auto;
+    }
+
+    .assessment-brand strong{
+      font-size:16px;
+      letter-spacing:-.02em;
+    }
+
+    .assessment-crumbs{
+      color:#667085;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .assessment-crumbs span:last-child{ color:var(--red); }
+
+    .download-report{
+      min-height:40px;
+      border-radius:10px;
+      padding:10px 14px;
+      background:#fff;
+      border:1px solid #dfe3eb;
+      color:#101525;
+      box-shadow:none;
+      font-size:13px;
+    }
+
+    .avatar{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#f1f3f7;
+      color:#101525;
+      font-weight:850;
+    }
+
+    .assessment-grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 360px;
+      gap:14px;
+    }
+
+    .assessment-main{
+      display:grid;
+      gap:14px;
+    }
+
+    .assessment-sidebar{
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+
+    .assessment-topgrid{
+      display:grid;
+      grid-template-columns:minmax(0, 1.25fr) 280px 300px;
+      gap:14px;
+    }
+
+    .assessment-card{
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:14px;
+      box-shadow:0 8px 20px rgba(15,23,42,.04);
+      padding:22px;
+      overflow:hidden;
+    }
+
+    .assessment-card.compact{ padding:18px; }
+
+    .result-eyebrow-red{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#fff2f2;
+      color:var(--red);
+      border:1px solid #ffc7c7;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:14px;
+    }
+
+    .assessment-title{
+      margin:0;
+      font-size:clamp(1.8rem, 3vw, 2.85rem);
+      line-height:1.02;
+      letter-spacing:-.055em;
+      color:#101525;
+    }
+
+    .assessment-copy{
+      margin:12px 0 0;
+      color:#525c73;
+      line-height:1.62;
+      font-size:15px;
+    }
+
+    .score-ring-card{
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:18px;
+    }
+
+    .score-ring{
+      width:210px;
+      height:210px;
+      border-radius:50%;
+      background:conic-gradient(var(--red) calc(var(--score) * 1%), #edf0f5 0);
+      position:relative;
+      display:grid;
+      place-items:center;
+    }
+
+    .score-ring::after{
+      content:"";
+      position:absolute;
+      inset:14px;
+      background:#fff;
+      border-radius:50%;
+      box-shadow:inset 0 0 0 1px #f0f2f6;
+    }
+
+    .score-ring-inner{
+      position:relative;
+      z-index:1;
+    }
+
+    .score-ring-inner strong{
+      display:block;
+      color:#101525;
+      font-size:66px;
+      line-height:.85;
+      letter-spacing:-.07em;
+    }
+
+    .score-ring-inner span{
+      display:block;
+      color:#525c73;
+      margin-top:6px;
+      font-size:18px;
+    }
+
+    .score-ring-label{
+      margin-top:12px;
+      color:#525c73;
+      font-size:13px;
+    }
+
+    .score-ring-label strong{ color:var(--red); }
+
+    .insight-curve{
+      height:88px;
+      margin-top:12px;
+      border-radius:12px;
+      background:linear-gradient(90deg,#f8fafc,#fff2f2);
+      position:relative;
+      overflow:hidden;
+      border:1px solid #eef1f6;
+    }
+
+    .insight-curve::before{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      top:34px;
+      height:80px;
+      border-radius:50% 50% 0 0;
+      border-top:1.5px solid #aeb7c8;
+    }
+
+    .insight-dot{
+      position:absolute;
+      right:22%;
+      top:42px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:var(--red);
+      border:2px solid #101525;
+      box-shadow:0 0 0 6px rgba(255,0,0,.09);
+    }
+
+    .summary-row{
+      display:grid;
+      grid-template-columns:32px minmax(0, 1fr) auto;
+      gap:12px;
+      align-items:center;
+      padding:12px 0;
+      border-bottom:1px solid #edf0f5;
+      font-size:14px;
+    }
+
+    .summary-row:last-child{ border-bottom:0; }
+
+    .summary-icon,
+    .pillar-icon,
+    .small-icon{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#fff2f2;
+      color:var(--red);
+      font-weight:900;
+      flex:0 0 auto;
+    }
+
+    .summary-row span{ color:#667085; }
+    .summary-row strong{ color:#101525; font-weight:750; text-align:right; }
+
+    .recommendation-card{
+      background:#f1fbf5;
+      border-color:#d9f0e2;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 92px;
+      gap:18px;
+      align-items:center;
+    }
+
+    .target-icon{
+      width:88px;
+      height:88px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      color:#159447;
+      background:radial-gradient(circle at center, transparent 30%, rgba(21,148,71,.22) 31% 42%, transparent 43% 54%, rgba(21,148,71,.32) 55% 66%, transparent 67%);
+      font-size:46px;
+      font-weight:950;
+    }
+
+    .pillars-overview{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0, 1fr));
+      gap:12px;
+    }
+
+    .pillar-card{
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:12px;
+      padding:14px;
+      display:grid;
+      gap:10px;
+      min-height:128px;
+      box-shadow:0 6px 16px rgba(15,23,42,.035);
+    }
+
+    .pillar-card.exposed{
+      border-color:var(--red);
+      background:#fffafa;
+    }
+
+    .pillar-title{
+      font-size:13px;
+      line-height:1.22;
+      font-weight:850;
+      color:#101525;
+    }
+
+    .pillar-score-big{
+      font-size:25px;
+      line-height:1;
+      letter-spacing:-.04em;
+      font-weight:850;
+      color:#101525;
+    }
+
+    .pillar-status{ font-size:12px; font-weight:800; }
+    .pillar-status.good{ color:#098d42; }
+    .pillar-status.warn{ color:#c2410c; }
+    .pillar-status.bad{ color:var(--red); }
+
+    .mini-progress{
+      height:6px;
+      border-radius:999px;
+      background:#edf0f5;
+      overflow:hidden;
+    }
+
+    .mini-progress span{
+      display:block;
+      height:100%;
+      width:0;
+      border-radius:999px;
+      background:#078c43;
+    }
+
+    .pillar-card.exposed .mini-progress span{ background:var(--red); }
+    .pillar-card.warn .mini-progress span{ background:#f97316; }
+
+    .two-column-section{
+      display:grid;
+      grid-template-columns:1fr 1.18fr;
+      gap:14px;
+    }
+
+    .working-list,
+    .priority-list,
+    .moves-strip{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .check-row,
+    .priority-row{
+      display:grid;
+      grid-template-columns:26px 1fr;
+      gap:10px;
+      align-items:start;
+      color:#2f3952;
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .check-dot,
+    .warn-dot{
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#0b8f43;
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+      margin-top:1px;
+    }
+
+    .warn-dot{ background:#ff8a00; }
+
+    .green-note,
+    .amber-note{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:750;
+      line-height:1.4;
+    }
+
+    .green-note{ background:#f0fbf4; color:#087b38; border:1px solid #d6f0df; }
+    .amber-note{ background:#fff7ed; color:#b73500; border:1px solid #fed7aa; }
+
+    .moves-strip{
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+    }
+
+    .move-tile{
+      display:grid;
+      grid-template-columns:30px 1fr;
+      gap:12px;
+      padding-right:12px;
+      border-right:1px solid #e8ebf2;
+    }
+
+    .move-tile:last-child{ border-right:0; }
+
+    .move-number{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .move-tile strong{ display:block; color:#101525; font-size:14px; line-height:1.3; }
+    .move-tile span{ display:block; color:#525c73; font-size:13px; line-height:1.35; margin-top:4px; }
+
+    .book-banner{
+      display:grid;
+      grid-template-columns:56px minmax(0, 1fr) auto;
+      gap:14px;
+      align-items:center;
+      background:#fff1f1;
+      border:1px solid #ffd8d8;
+      border-radius:12px;
+      padding:14px 18px;
+    }
+
+    .book-icon{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-weight:950;
+      transform:rotate(-8deg);
+    }
+
+    .book-banner h3{ margin:0; font-size:17px; letter-spacing:-.02em; }
+    .book-banner p{ margin:4px 0 0; color:#525c73; font-size:13px; line-height:1.4; }
+
+    .resource-list{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .resource-panel{
+      display:grid;
+      grid-template-columns:52px 1fr;
+      gap:12px;
+      padding:14px;
+      border:1px solid #e8ebf2;
+      border-radius:12px;
+      background:#fff;
+    }
+
+    .resource-panel h3{ margin:0; color:#101525; font-size:15px; }
+    .resource-panel p{ margin:5px 0 10px; color:#525c73; font-size:13px; line-height:1.42; }
+    .resource-panel a{ color:var(--red); font-size:13px; font-weight:850; text-decoration:none; }
+
+    .resource-icon{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .data-note{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      color:#667085;
+      font-size:12px;
+      margin-top:12px;
+    }
+
+    .assessment-ui{
+      min-height:0;
+      padding:8px;
+      background:#f8fafc;
+      color:#101525;
+    }
+
+    .assessment-ui .section-title{
+      margin:0;
+      color:#101525;
+      font-size:16px;
+      line-height:1.25;
+      letter-spacing:0;
+    }
+
+    .assessment-topbar{
+      display:grid;
+      grid-template-columns:auto auto;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:8px;
+      padding:10px 12px;
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:12px;
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+    }
+
+    .assessment-brand,
+    .assessment-crumbs,
+    .assessment-user{
+      display:flex;
+      align-items:center;
+      min-width:0;
+      gap:10px;
+    }
+
+    .assessment-crumbs{
+      display:none;
+      justify-content:center;
+      color:#667085;
+      font-size:13px;
+      font-weight:750;
+    }
+
+    .assessment-crumbs span:last-child{ color:var(--red); }
+
+    .assessment-user{ justify-content:flex-end; }
+
+    .assessment-logo{
+      display:block;
+      width:42px;
+      height:42px;
+      object-fit:contain;
+    }
+
+    .download-report{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:38px;
+      border-radius:8px;
+      padding:9px 13px;
+      background:#fff;
+      border:1px solid #dfe3eb;
+      color:#101525;
+      box-shadow:none;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .download-icon{
+      position:relative;
+      width:16px;
+      height:16px;
+      flex:0 0 auto;
+    }
+
+    .download-icon::before{
+      content:"";
+      position:absolute;
+      left:6px;
+      top:1px;
+      width:4px;
+      height:9px;
+      border-radius:2px;
+      background:currentColor;
+    }
+
+    .download-icon::after{
+      content:"";
+      position:absolute;
+      left:3px;
+      top:7px;
+      width:10px;
+      height:8px;
+      border:2px solid currentColor;
+      border-top:0;
+      border-radius:0 0 3px 3px;
+    }
+
+    .assessment-grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(288px, 340px);
+      gap:8px;
+      align-items:start;
+    }
+
+    .assessment-main,
+    .assessment-sidebar{
+      display:grid;
+      gap:8px;
+      min-width:0;
+      align-content:start;
+    }
+
+    @media (min-width: 981px){
+      .assessment-main{
+        grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .assessment-topgrid,
+      .pillar-summary-card,
+      .two-column-section{
+        grid-column:1 / -1;
+      }
+
+      .moves-card{
+        grid-column:1;
+      }
+
+      .chapter-banner{
+        grid-column:2;
+      }
+    }
+
+    .assessment-topgrid{
+      display:grid;
+      grid-template-columns:minmax(300px, 1.22fr) minmax(176px, .62fr) minmax(230px, .88fr);
+      gap:8px;
+      align-items:stretch;
+    }
+
+    .assessment-card{
+      min-width:0;
+      padding:14px;
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:10px;
+      box-shadow:0 8px 20px rgba(15,23,42,.04);
+      overflow:hidden;
+    }
+
+    .assessment-intro,
+    .insight-card-ui,
+    .score-ring-card{
+      min-height:176px;
+    }
+
+    .assessment-intro{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .assessment-card.compact{ padding:14px; }
+
+    .result-eyebrow-red,
+    .result-eyebrow-green{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      max-width:100%;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:850;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:0;
+      margin-bottom:10px;
+    }
+
+    .result-eyebrow-red{
+      background:#fff2f2;
+      color:var(--red);
+      border:1px solid #ffc7c7;
+    }
+
+    .result-eyebrow-green{
+      background:#eefaf2;
+      color:#087b38;
+      border:1px solid #cdeed7;
+    }
+
+    .assessment-title{
+      margin:0;
+      color:#101525;
+      font-size:29px;
+      line-height:1.08;
+      letter-spacing:0;
+    }
+
+    .assessment-copy{
+      margin:9px 0 0;
+      color:#525c73;
+      line-height:1.42;
+      font-size:13px;
+    }
+
+    .assessment-copy strong{ color:#101525; }
+
+    .score-ring-card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:14px;
+    }
+
+    .score-ring{
+      width:132px;
+      height:132px;
+      border-radius:50%;
+      background:conic-gradient(var(--red) calc(var(--score) * 1%), #edf0f5 0);
+      position:relative;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+
+    .score-ring::after{
+      content:"";
+      position:absolute;
+      inset:9px;
+      background:#fff;
+      border-radius:50%;
+      box-shadow:inset 0 0 0 1px #f0f2f6;
+    }
+
+    .score-ring-inner{
+      position:relative;
+      z-index:1;
+    }
+
+    .score-ring-inner strong{
+      display:block;
+      color:#101525;
+      font-size:42px;
+      line-height:.9;
+      letter-spacing:0;
+    }
+
+    .score-ring-inner span{
+      display:block;
+      color:#525c73;
+      margin-top:4px;
+      font-size:13px;
+    }
+
+    .score-ring-label{
+      margin-top:9px;
+      color:#525c73;
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .score-ring-label strong{ color:var(--red); }
+
+    .insight-title{
+      font-size:17px;
+      line-height:1.22;
+    }
+
+    .insight-curve{
+      height:50px;
+      margin-top:8px;
+      border-radius:10px;
+      background:
+        linear-gradient(90deg, rgba(248,250,252,.2), rgba(255,242,242,.98)),
+        repeating-linear-gradient(90deg, transparent 0 37px, rgba(101,115,139,.18) 38px 39px);
+      position:relative;
+      overflow:hidden;
+      border:1px solid #eef1f6;
+    }
+
+    .insight-curve::before{
+      content:"";
+      position:absolute;
+      left:-7%;
+      right:-7%;
+      top:18px;
+      height:54px;
+      border-radius:50% 50% 0 0;
+      border-top:1.5px solid #aeb7c8;
+    }
+
+    .insight-curve::after{
+      content:"";
+      position:absolute;
+      right:0;
+      bottom:0;
+      width:34%;
+      height:54%;
+      background:linear-gradient(90deg, rgba(255,0,0,0), rgba(255,0,0,.2));
+    }
+
+    .insight-dot{
+      position:absolute;
+      right:22%;
+      top:24px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:var(--red);
+      border:2px solid #101525;
+      box-shadow:0 0 0 6px rgba(255,0,0,.09);
+      z-index:1;
+    }
+
+    .insight-axis{
+      display:flex;
+      justify-content:space-between;
+      color:#667085;
+      font-size:11px;
+      margin-top:6px;
+    }
+
+    .summary-stack{ margin-top:12px; }
+
+    .summary-row{
+      display:grid;
+      grid-template-columns:26px minmax(0, 1fr) minmax(92px, auto);
+      gap:8px;
+      align-items:center;
+      padding:7px 0;
+      border-bottom:1px solid #edf0f5;
+      font-size:12.5px;
+    }
+
+    .summary-row:last-child{ border-bottom:0; }
+    .summary-row span{ color:#667085; }
+    .summary-row strong{ color:#101525; font-weight:750; text-align:right; }
+
+    .summary-icon,
+    .pillar-icon,
+    .small-icon{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#fff2f2;
+      color:var(--red);
+      font-weight:850;
+      flex:0 0 auto;
+    }
+
+    .summary-icon{ position:relative; }
+    .summary-icon::before{
+      content:"";
+      width:12px;
+      height:12px;
+      border:2px solid currentColor;
+      border-radius:4px;
+    }
+
+    .summary-icon-framework::before{ border-radius:50%; }
+    .summary-icon-stage::before{
+      border-radius:50%;
+      background:currentColor;
+      box-shadow:0 0 0 5px rgba(255,0,0,.08);
+    }
+    .summary-icon-exposed::before{
+      width:0;
+      height:0;
+      border-top:0;
+      border-left:7px solid transparent;
+      border-right:7px solid transparent;
+      border-bottom:14px solid currentColor;
+      border-radius:0;
+    }
+    .summary-icon-date::before{
+      height:12px;
+      border-radius:3px;
+      box-shadow:inset 0 4px 0 rgba(255,0,0,.18);
+    }
+
+    .recommendation-card{
+      background:#f1fbf5;
+      border-color:#d9f0e2;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 58px;
+      gap:10px;
+      align-items:center;
+    }
+
+    .target-icon{
+      position:relative;
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      border:6px solid rgba(21,148,71,.32);
+    }
+
+    .target-icon::before{
+      content:"";
+      position:absolute;
+      inset:9px;
+      border:5px solid rgba(21,148,71,.5);
+      border-radius:50%;
+    }
+
+    .target-icon::after{
+      content:"";
+      position:absolute;
+      right:1px;
+      top:2px;
+      width:24px;
+      height:24px;
+      border-top:6px solid #4fba78;
+      border-right:6px solid #4fba78;
+      transform:rotate(-8deg);
+    }
+
+    .pillars-overview{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0, 1fr));
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .pillar-card{
+      min-width:0;
+      min-height:88px;
+      padding:10px;
+      display:grid;
+      gap:6px;
+      background:#fff;
+      border:1px solid #e8ebf2;
+      border-radius:10px;
+      box-shadow:0 6px 16px rgba(15,23,42,.035);
+    }
+
+    .pillar-card.exposed{
+      border-color:var(--red);
+      background:#fffafa;
+    }
+
+    .pillar-card.status-good .pillar-icon{ background:#e8f8ef; color:#098d42; }
+    .pillar-card.status-warn .pillar-icon{ background:#fff4e5; color:#c75b00; }
+    .pillar-card.status-bad .pillar-icon,
+    .pillar-card.exposed .pillar-icon{ background:#fff2f2; color:var(--red); }
+
+    .pillar-title{
+      color:#101525;
+      font-size:12px;
+      line-height:1.25;
+      font-weight:850;
+    }
+
+    .pillar-score-big{
+      color:#101525;
+      font-size:20px;
+      line-height:1;
+      letter-spacing:0;
+      font-weight:850;
+    }
+
+    .pillar-status{ font-size:11px; font-weight:800; }
+    .pillar-status.good{ color:#098d42; }
+    .pillar-status.warn{ color:#c2410c; }
+    .pillar-status.bad{ color:var(--red); }
+
+    .mini-progress{
+      height:6px;
+      border-radius:999px;
+      background:#edf0f5;
+      overflow:hidden;
+    }
+
+    .mini-progress span{
+      display:block;
+      height:100%;
+      width:0;
+      border-radius:999px;
+      background:#078c43;
+    }
+
+    .pillar-card.exposed .mini-progress span,
+    .pillar-card.status-bad .mini-progress span{ background:var(--red); }
+    .pillar-card.status-warn .mini-progress span{ background:#f97316; }
+
+    .two-column-section{
+      display:grid;
+      grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr);
+      gap:8px;
+      align-items:stretch;
+    }
+
+    .card-heading{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:10px;
+    }
+
+    .card-heading .section-title{ margin:0; }
+
+    .small-icon{
+      position:relative;
+      color:#fff;
+      background:#0b8f43;
+    }
+
+    .small-icon::before{ content:""; }
+    .small-icon.good::before{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      border:2px solid currentColor;
+      box-shadow:inset 0 0 0 4px currentColor;
+    }
+    .small-icon.warn{ background:#ff8a00; }
+    .small-icon.warn::before{
+      width:0;
+      height:0;
+      border-left:7px solid transparent;
+      border-right:7px solid transparent;
+      border-bottom:14px solid currentColor;
+    }
+    .small-icon.resource{ background:#fff2f2; color:var(--red); }
+    .small-icon.resource::before{
+      width:12px;
+      height:14px;
+      border:2px solid currentColor;
+      border-radius:3px;
+    }
+
+    .working-list,
+    .priority-list,
+    .moves-strip{
+      display:grid;
+      gap:9px;
+      margin-top:0;
+    }
+
+    .check-row,
+    .priority-row{
+      display:grid;
+      grid-template-columns:24px minmax(0, 1fr);
+      gap:10px;
+      align-items:start;
+      color:#2f3952;
+      font-size:13px;
+      line-height:1.38;
+    }
+
+    .check-dot,
+    .warn-dot{
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#0b8f43;
+      color:#fff;
+      font-size:12px;
+      font-weight:850;
+      margin-top:1px;
+    }
+
+    .warn-dot{ background:#ff8a00; }
+
+    .green-note,
+    .amber-note{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:8px;
+      font-size:13px;
+      font-weight:750;
+      line-height:1.4;
+    }
+
+    .green-note{ background:#f0fbf4; color:#087b38; border:1px solid #d6f0df; }
+    .amber-note{ background:#fff7ed; color:#b73500; border:1px solid #fed7aa; }
+
+    .moves-strip{
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+    }
+
+    .move-tile{
+      display:grid;
+      grid-template-columns:28px minmax(0, 1fr);
+      gap:12px;
+      padding-right:12px;
+      border-right:1px solid #e8ebf2;
+    }
+
+    .move-tile:last-child{ border-right:0; }
+    .move-number{
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+    }
+    .move-tile strong{ display:block; color:#101525; font-size:14px; line-height:1.3; }
+    .move-tile span{ display:block; color:#525c73; font-size:12.5px; line-height:1.32; margin-top:4px; }
+
+    .book-banner{
+      display:grid;
+      grid-template-columns:52px minmax(0, 1fr) auto;
+      gap:13px;
+      align-items:center;
+      padding:13px 16px;
+      background:#fff1f1;
+      border:1px solid #ffd8d8;
+      border-radius:10px;
+    }
+
+    .book-icon{
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-size:12px;
+      font-weight:850;
+      transform:rotate(-8deg);
+    }
+
+    .book-banner h3{ margin:0; font-size:17px; line-height:1.25; letter-spacing:0; }
+    .book-banner p{
+      margin:4px 0 0;
+      color:#525c73;
+      font-size:13px;
+      line-height:1.38;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .chapter-banner{
+      border-color:#ffc9c9;
+      box-shadow:0 8px 20px rgba(204,0,0,.06);
+    }
+
+    @media (min-width: 981px){
+      .chapter-banner{
+        grid-template-columns:48px minmax(0, 1fr);
+        align-items:start;
+      }
+
+      .chapter-banner .btn{
+        grid-column:1 / -1;
+        width:100%;
+        min-height:42px;
+      }
+
+      .chapter-banner p{
+        -webkit-line-clamp:3;
+      }
+    }
+
+    .chapter-kicker{
+      margin:0 0 3px;
+      color:var(--red);
+      font-size:11px;
+      font-weight:850;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:0;
+    }
+
+    .resource-list{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .resource-panel{
+      display:grid;
+      grid-template-columns:46px minmax(0, 1fr);
+      gap:10px;
+      padding:12px;
+      border:1px solid #e8ebf2;
+      border-radius:10px;
+      background:#fff;
+    }
+
+    .resource-panel h3{ margin:0; color:#101525; font-size:14px; line-height:1.25; }
+    .resource-panel p{ margin:5px 0 9px; color:#525c73; font-size:12.5px; line-height:1.38; }
+    .resource-panel a{ color:var(--red); font-size:13px; font-weight:850; text-decoration:none; }
+
+    .resource-icon{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--red);
+      color:#fff;
+      font-size:11px;
+      font-weight:850;
+      letter-spacing:0;
+    }
+
+    .resource-icon-kit::before{ content:"PDF"; }
+    .resource-icon-study::before{ content:"CASE"; }
+    .resource-icon-chapter::before{ content:"BOOK"; }
+
+    .data-note{
+      margin:10px 0 0;
+      gap:7px;
+      text-align:center;
+    }
+
+    .data-note::before{
+      content:"";
+      width:12px;
+      height:14px;
+      border:2px solid currentColor;
+      border-radius:3px;
+    }
+
+    @media (max-width: 1100px){
+      .assessment-grid{ grid-template-columns:1fr; }
+      .assessment-topgrid{ grid-template-columns:1fr 280px; }
+      .assessment-sidebar{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    }
+
+    @media (max-width: 860px){
+      .tsw-tool{ padding:8px; align-items:flex-start; }
+      .shell{ border-radius:24px; }
+      .landing-card{ min-height:0; padding:12px 12px 20px; }
+      .hero-panel{ aspect-ratio:16 / 10; }
+      .content-panel{ padding:0 2px 4px; }
+      .narrow-panel{ padding:30px 18px 34px; }
+      .two-col, .landing-action-row{ grid-template-columns:1fr; }
+      .landing-action-row .btn{ min-width:0; width:100%; }
+      .progress-head{ align-items:flex-start; flex-direction:column; gap:8px; }
+      .helper-note{ text-align:left; }
+      .question-card, .gate-card, .result-card, .insight-card, .dynamic-card, .soft-close, .band-card, .score-card{ padding:18px; border-radius:18px; }
+      .result-hero{ grid-template-columns:1fr; }
+      .metric-grid, .resource-grid{ grid-template-columns:1fr; }
+      .title{ font-size:clamp(2rem, 12vw, 3rem); }
+      .question-media::before{ padding-top:56%; }
+      .assessment-topbar{ align-items:flex-start; flex-direction:column; }
+      .assessment-crumbs{ display:none; }
+      .assessment-user{ width:100%; justify-content:space-between; }
+      .assessment-topgrid, .two-column-section, .moves-strip, .pillars-overview, .assessment-sidebar{ grid-template-columns:1fr; }
+      .score-ring{ width:190px; height:190px; }
+      .book-banner{ grid-template-columns:48px 1fr; }
+      .book-banner .btn{ grid-column:1 / -1; width:100%; }
+    }
+
+    @media (max-width: 1280px){
+      .assessment-grid{
+        grid-template-columns:1fr;
+      }
+
+      .assessment-sidebar{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+
+      .assessment-topgrid{
+        grid-template-columns:minmax(0, 1fr) minmax(238px, 280px);
+      }
+
+      .insight-card-ui{
+        grid-column:1 / -1;
+        min-height:0;
+      }
+
+      .pillars-overview{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px){
+      .shell.is-result{
+        width:min(100%, calc(100vw - 16px));
+      }
+
+      .assessment-topgrid,
+      .two-column-section,
+      .assessment-sidebar{
+        grid-template-columns:1fr;
+      }
+
+      .pillars-overview{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+
+      .moves-strip{
+        grid-template-columns:1fr;
+      }
+
+      .move-tile{
+        padding:0 0 12px;
+        border-right:0;
+        border-bottom:1px solid #e8ebf2;
+      }
+
+      .move-tile:last-child{
+        padding-bottom:0;
+        border-bottom:0;
+      }
+    }
+
+    @media (max-width: 680px){
+      .tsw-tool.is-result-mode{
+        padding:0;
+      }
+
+      .shell.is-result{
+        width:100%;
+        min-height:100vh;
+        border-radius:0;
+        border-left:0;
+        border-right:0;
+      }
+
+      .result-panel{
+        padding:0;
+      }
+
+      .assessment-ui{
+        min-height:100vh;
+        padding:8px;
+      }
+
+      .assessment-topbar{
+        grid-template-columns:auto auto;
+        align-items:center;
+        gap:10px;
+        border-radius:12px;
+      }
+
+      .assessment-crumbs{
+        display:none;
+      }
+
+      .assessment-user{
+        width:auto;
+        display:flex;
+        gap:8px;
+      }
+
+      .download-report{
+        width:auto;
+        padding:9px 11px;
+      }
+
+      .assessment-card{
+        padding:16px;
+      }
+
+      .assessment-intro,
+      .score-ring-card{
+        min-height:0;
+      }
+
+      .assessment-title{
+        font-size:32px;
+        line-height:1.1;
+      }
+
+      .assessment-copy{
+        font-size:14px;
+        line-height:1.55;
+      }
+
+      .score-ring{
+        width:172px;
+        height:172px;
+      }
+
+      .score-ring-inner strong{
+        font-size:54px;
+      }
+
+      .pillars-overview{
+        grid-template-columns:1fr;
+      }
+
+      .summary-row{
+        grid-template-columns:32px minmax(0, 1fr);
+        align-items:start;
+      }
+
+      .summary-row strong{
+        grid-column:2;
+        text-align:left;
+      }
+
+      .recommendation-card{
+        grid-template-columns:1fr;
+      }
+
+      .target-icon{
+        width:74px;
+        height:74px;
+      }
+
+      .book-banner{
+        grid-template-columns:44px minmax(0, 1fr);
+        padding:14px;
+      }
+
+      .book-banner .btn{
+        grid-column:1 / -1;
+        width:100%;
+      }
+
+      .resource-panel{
+        grid-template-columns:46px minmax(0, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *, *::before, *::after{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.001ms !important;
+      }
+    }
+  
+
+    /* Premium V2 revisions: centered landing, full-width question imagery, country picker, and result storytelling. */
+    .shell:not(.is-result){
+      width:min(1320px, calc(100vw - 24px));
+    }
+
+    .landing-card{
+      max-width:1440px;
+      padding:18px 28px 24px;
+    }
+
+    .hero-panel{
+      aspect-ratio:16 / 5.9;
+      max-height:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:28px;
+    }
+
+    .hero-panel img{
+      object-position:center center;
+    }
+
+    .content-panel{
+      max-width:1110px;
+    }
+
+    .landing-main-title{
+      max-width:880px;
+      font-size:clamp(2.25rem, 4.6vw, 4.25rem);
+    }
+
+    .landing-action-row{
+      max-width:100%;
+      margin-top:20px;
+      border-radius:22px;
+      padding:14px;
+    }
+
+    .narrow-panel{
+      max-width:1120px;
+      padding:34px 44px 42px;
+    }
+
+    .progress-head{
+      margin-bottom:16px;
+    }
+
+    .progress-pill{
+      background:#fff2f2;
+      color:var(--brick-ember);
+      box-shadow:inset 0 0 0 1px rgba(204,0,0,.1);
+    }
+
+    .question-card{
+      display:block !important;
+      padding:0;
+      border-radius:30px;
+      overflow:hidden;
+      background:rgba(255,255,255,.98);
+      box-shadow:0 28px 80px rgba(39,39,39,.13);
+    }
+
+    .question-title{
+      padding:32px 34px 0;
+      max-width:880px;
+      font-size:clamp(2.1rem, 4.2vw, 3.85rem);
+      line-height:1.02;
+      letter-spacing:-.065em;
+    }
+
+    .question-card > .micro-copy{
+      padding:0 34px;
+      margin-top:8px;
+      color:#525c73;
+      font-weight:650;
+    }
+
+    .question-media{
+      margin:24px 34px 22px;
+      border-radius:24px;
+      border-color:rgba(204,0,0,.11);
+      box-shadow:0 18px 42px rgba(39,39,39,.09);
+      background:linear-gradient(135deg,#fff8f8,#f7f8fb);
+    }
+
+    .question-media::before{
+      padding-top:min(42%, 430px);
+    }
+
+    .question-media img{
+      object-position:center center;
+    }
+
+    .options{
+      grid-column:auto !important;
+      grid-row:auto !important;
+      margin:0;
+      padding:0 34px;
+      gap:12px;
+    }
+
+    .option-btn{
+      min-height:64px;
+      grid-template-columns:24px 1fr;
+      gap:14px;
+      padding:16px 18px;
+      border-radius:18px;
+      border-color:#e6e8ee;
+      background:#fff;
+    }
+
+    .option-btn:hover{
+      background:#fffafa;
+      box-shadow:0 16px 34px rgba(39,39,39,.08);
+    }
+
+    .option-btn.selected{
+      background:linear-gradient(135deg,#fff2f2,#fff);
+      border-color:var(--red);
+      box-shadow:0 0 0 5px rgba(255,0,0,.08), 0 18px 36px rgba(204,0,0,.09);
+    }
+
+    .option-index{
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#fff;
+      border:1.5px solid #d8deea;
+      color:transparent;
+      font-size:0;
+      position:relative;
+    }
+
+    .option-btn.selected .option-index{
+      background:#fff;
+      border-color:var(--red);
+      color:transparent;
+    }
+
+    .option-btn.selected .option-index::after{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:50%;
+      background:var(--red);
+    }
+
+    .option-text{
+      font-weight:800;
+      line-height:1.35;
+      letter-spacing:-.015em;
+    }
+
+    .question-actions{
+      padding:0 34px 34px;
+      margin-top:18px;
+    }
+
+    .question-card > .form-grid{
+      grid-column:auto !important;
+      grid-row:auto !important;
+      width:min(760px, calc(100% - 68px));
+      margin:0 34px 34px;
+      padding:0;
+    }
+
+    .country-form{
+      gap:14px;
+    }
+
+    .country-picker{
+      position:relative;
+      display:grid;
+      gap:10px;
+      padding:18px;
+      border:1px solid #e8ebf2;
+      border-radius:22px;
+      background:linear-gradient(180deg,#ffffff,#fffafa);
+      box-shadow:0 18px 42px rgba(39,39,39,.06);
+    }
+
+    .country-input-wrap{
+      position:relative;
+    }
+
+    .country-input-wrap::after{
+      content:"";
+      position:absolute;
+      right:16px;
+      top:50%;
+      width:10px;
+      height:10px;
+      border-right:2px solid #8b95a8;
+      border-bottom:2px solid #8b95a8;
+      transform:translateY(-62%) rotate(45deg);
+      pointer-events:none;
+    }
+
+    .country-picker .field{
+      padding-right:44px;
+      min-height:58px;
+      border-radius:17px;
+      font-weight:750;
+      background:#fff;
+    }
+
+    .country-helper{
+      color:#667085;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .country-suggestions{
+      display:grid;
+      gap:8px;
+      max-height:318px;
+      overflow:auto;
+      padding:6px 4px 4px;
+      scrollbar-width:thin;
+    }
+
+    .country-suggestions-head{
+      padding:2px 4px 4px;
+      color:#8b95a8;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .country-option{
+      width:100%;
+      display:grid;
+      grid-template-columns:38px minmax(0, 1fr) auto;
+      align-items:center;
+      gap:12px;
+      min-height:54px;
+      padding:10px 12px;
+      border:1px solid #e8ebf2;
+      border-radius:15px;
+      background:#fff;
+      color:#101525;
+      cursor:pointer;
+      text-align:left;
+      transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .country-option:hover,
+    .country-option:focus{
+      outline:none;
+      transform:translateY(-1px);
+      border-color:rgba(204,0,0,.36);
+      box-shadow:0 12px 26px rgba(39,39,39,.07);
+      background:#fffafa;
+    }
+
+    .country-flag{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:#f8fafc;
+      font-size:22px;
+    }
+
+    .country-name{
+      min-width:0;
+      font-weight:850;
+      line-height:1.25;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .country-code{
+      padding:5px 8px;
+      border-radius:999px;
+      background:#fff2f2;
+      color:var(--brick-ember);
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .country-empty{
+      padding:14px;
+      border:1px dashed #d7dbe5;
+      border-radius:15px;
+      background:#fff;
+      color:#667085;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .assessment-ui{
+      padding:14px;
+      background:
+        radial-gradient(circle at 8% 4%, rgba(255,0,0,.08), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(39,39,39,.08), transparent 26%),
+        linear-gradient(180deg,#f8fafc,#f1f3f7);
+    }
+
+    .assessment-topbar{
+      border-radius:16px;
+      padding:12px 14px;
+      margin-bottom:12px;
+      border-color:#e4e8f0;
+    }
+
+    .assessment-logo{
+      width:46px;
+      height:46px;
+    }
+
+    .button-icon,
+    .premium-card-icon,
+    .svg-holder{
+      display:inline-grid;
+      place-items:center;
+      color:currentColor;
+      flex:0 0 auto;
+    }
+
+    .svg-icon{
+      width:1em;
+      height:1em;
+      display:block;
+    }
+
+    .button-icon{
+      font-size:16px;
+    }
+
+    .assessment-grid{
+      grid-template-columns:minmax(0, 1fr) minmax(300px, 360px);
+      gap:12px;
+    }
+
+    .assessment-main,
+    .assessment-sidebar{
+      gap:12px;
+    }
+
+    .assessment-card{
+      border-radius:18px;
+      border-color:#e4e8f0;
+      box-shadow:0 16px 42px rgba(15,23,42,.055);
+      padding:18px;
+    }
+
+    .assessment-topgrid{
+      grid-template-columns:minmax(320px, 1.25fr) minmax(190px, .58fr) minmax(260px, .9fr);
+      gap:12px;
+    }
+
+    .assessment-title{
+      font-size:clamp(2rem, 3.2vw, 3.35rem);
+      letter-spacing:-.055em;
+    }
+
+    .assessment-copy{
+      font-size:14px;
+      line-height:1.58;
+    }
+
+    .score-ring-card{
+      border-color:#eceff5;
+      background:linear-gradient(180deg,#fff,#fbfcff);
+    }
+
+    .score-ring{
+      width:148px;
+      height:148px;
+      background:conic-gradient(var(--red) calc(var(--score) * 1%), #e9edf4 0);
+      box-shadow:0 12px 32px rgba(204,0,0,.08);
+    }
+
+    .score-ring::after{
+      inset:10px;
+    }
+
+    .score-ring-inner strong{
+      font-size:46px;
+      letter-spacing:-.045em;
+    }
+
+    .insight-card-ui{
+      position:relative;
+      min-height:100%;
+      background:
+        radial-gradient(circle at 88% 14%, rgba(255,255,255,.28), transparent 22%),
+        linear-gradient(135deg,#cc0000 0%, #ff0000 48%, #1a1a1a 100%);
+      border-color:rgba(255,255,255,.18);
+      color:#fff;
+      overflow:hidden;
+    }
+
+    .insight-card-ui::after{
+      content:"";
+      position:absolute;
+      right:-42px;
+      bottom:-52px;
+      width:170px;
+      height:170px;
+      border-radius:50%;
+      border:22px solid rgba(255,255,255,.12);
+      box-shadow:0 0 0 22px rgba(255,255,255,.06);
+      pointer-events:none;
+    }
+
+    .insight-card-ui .result-eyebrow-red{
+      background:rgba(255,255,255,.14);
+      border-color:rgba(255,255,255,.28);
+      color:#fff;
+    }
+
+    .insight-card-ui .section-title,
+    .insight-card-ui .assessment-copy{
+      color:#fff;
+      position:relative;
+      z-index:1;
+    }
+
+    .insight-card-ui .assessment-copy{
+      color:rgba(255,255,255,.84);
+    }
+
+    .premium-card-icon{
+      width:42px;
+      height:42px;
+      margin-bottom:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.15);
+      color:#fff;
+      font-size:22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .insight-curve,
+    .insight-axis{
+      display:none !important;
+    }
+
+    .pillar-summary-card{
+      background:linear-gradient(180deg,#fff,#fbfcff);
+    }
+
+    .pillar-card{
+      border-radius:16px;
+      padding:14px;
+      min-height:116px;
+    }
+
+    .pillar-card.exposed{
+      border-color:rgba(255,0,0,.45);
+      background:linear-gradient(180deg,#fffafa,#fff);
+      box-shadow:0 16px 34px rgba(204,0,0,.08);
+    }
+
+    .pillar-icon,
+    .small-icon,
+    .resource-icon{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .summary-icon::before,
+    .small-icon::before,
+    .resource-icon::before{
+      content:none !important;
+      display:none !important;
+    }
+
+    .pillar-icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      font-size:18px;
+    }
+
+    .pillar-card.status-good .pillar-icon{ background:#e8f8ef; color:#098d42; }
+    .pillar-card.status-warn .pillar-icon{ background:#fff4e5; color:#c75b00; }
+    .pillar-card.status-bad .pillar-icon,
+    .pillar-card.exposed .pillar-icon{ background:#fff2f2; color:var(--red); }
+
+    .story-card{
+      position:relative;
+      border-radius:20px;
+      background:#fff;
+    }
+
+    .working-card{
+      border-color:#dcefe4;
+      background:linear-gradient(180deg,#ffffff,#f8fffb);
+    }
+
+    .priority-card{
+      border-color:#ffe1c2;
+      background:linear-gradient(180deg,#ffffff,#fffaf4);
+    }
+
+    .card-heading{
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .small-icon{
+      width:38px;
+      height:38px;
+      border-radius:14px;
+      font-size:20px;
+      background:#0b8f43;
+      color:#fff;
+    }
+
+    .small-icon.warn{
+      background:#fff2e4;
+      color:#c75000;
+    }
+
+    .small-icon.resource{
+      background:#fff2f2;
+      color:var(--red);
+    }
+
+    .small-icon.move{
+      background:#111827;
+      color:#fff;
+    }
+
+    .working-list,
+    .priority-list{
+      gap:10px;
+    }
+
+    .check-row,
+    .priority-row{
+      grid-template-columns:30px minmax(0, 1fr);
+      padding:12px;
+      border:1px solid #edf0f5;
+      border-radius:14px;
+      background:rgba(255,255,255,.76);
+    }
+
+    .check-dot,
+    .warn-dot{
+      width:24px;
+      height:24px;
+      border-radius:10px;
+      font-size:14px;
+    }
+
+    .warn-dot{
+      background:#ff8a00;
+    }
+
+    .green-note,
+    .amber-note{
+      border-radius:14px;
+      padding:13px 14px;
+      line-height:1.5;
+    }
+
+    .resources-path-card{
+      background:linear-gradient(180deg,#fff,#fbfcff);
+      border-color:#e5e8ef;
+    }
+
+    .resources-path-card .assessment-copy{
+      max-width:64ch;
+    }
+
+    .section-kicker,
+    .chapter-kicker{
+      display:inline-flex;
+      width:max-content;
+      align-items:center;
+      gap:7px;
+      margin:0 0 8px;
+      padding:5px 8px;
+      border-radius:999px;
+      background:#fff2f2;
+      color:var(--red);
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .resource-list-premium{
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .resource-panel{
+      grid-template-columns:48px minmax(0, 1fr);
+      gap:13px;
+      padding:15px;
+      border-radius:16px;
+      border-color:#e5e8ef;
+      box-shadow:0 10px 26px rgba(15,23,42,.04);
+    }
+
+    .resource-panel h3{
+      font-size:15px;
+      line-height:1.25;
+    }
+
+    .resource-panel p{
+      font-size:13px;
+      line-height:1.48;
+    }
+
+    .resource-panel a{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .resource-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      font-size:22px;
+      background:var(--red);
+      color:#fff;
+    }
+
+    .resource-icon-study{
+      background:#272727;
+    }
+
+    .resource-icon-chapter{
+      background:linear-gradient(135deg,var(--red),#272727);
+    }
+
+    .book-banner{
+      border-radius:18px;
+      padding:18px;
+      background:
+        radial-gradient(circle at 95% 10%, rgba(255,0,0,.15), transparent 30%),
+        linear-gradient(135deg,#fff4f4,#ffffff);
+      border-color:#ffd1d1;
+      box-shadow:0 16px 34px rgba(204,0,0,.075);
+    }
+
+    .book-icon{
+      border-radius:16px;
+      font-size:22px;
+      transform:rotate(-6deg);
+    }
+
+    .book-banner h3{
+      font-size:19px;
+      line-height:1.22;
+    }
+
+    .book-banner p{
+      -webkit-line-clamp:unset;
+      overflow:visible;
+      display:block;
+    }
+
+    .moves-card-side{
+      position:sticky;
+      top:12px;
+      border-color:#dfe4ee;
+      background:linear-gradient(180deg,#ffffff,#f7f9fd);
+    }
+
+    .moves-card-side .assessment-copy{
+      margin-bottom:14px;
+    }
+
+    .moves-card-side .moves-strip{
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .moves-card-side .move-tile{
+      padding:13px;
+      border:1px solid #e8ebf2;
+      border-radius:15px;
+      background:#fff;
+    }
+
+    .moves-card-side .move-tile:not(:last-child){
+      border-right:1px solid #e8ebf2;
+      border-bottom:1px solid #e8ebf2;
+    }
+
+    .move-number{
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--red),var(--brick-ember));
+      box-shadow:0 8px 16px rgba(204,0,0,.16);
+    }
+
+    .move-tile{
+      border-right:0;
+    }
+
+    .data-note{
+      color:#667085;
+    }
+
+    @media (min-width: 981px){
+      .assessment-main{
+        grid-template-columns:minmax(0, 1fr) minmax(0, .86fr);
+      }
+
+      .assessment-topgrid,
+      .pillar-summary-card,
+      .two-column-section{
+        grid-column:1 / -1;
+      }
+
+      .resources-path-card{
+        grid-column:1;
+      }
+
+      .chapter-banner{
+        grid-column:2;
+      }
+    }
+
+    @media (max-width: 1280px){
+      .assessment-grid{
+        grid-template-columns:1fr !important;
+      }
+
+      .assessment-sidebar{
+        grid-template-columns:1fr !important;
+      }
+
+      .moves-card-side{
+        position:relative;
+        top:auto;
+      }
+
+      .moves-card-side .moves-strip{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px){
+      .shell:not(.is-result){
+        width:min(100%, calc(100vw - 16px));
+      }
+
+      .narrow-panel{
+        max-width:100%;
+        padding:24px 18px 30px;
+      }
+
+      .assessment-topgrid,
+      .two-column-section,
+      .pillars-overview,
+      .moves-card-side .moves-strip{
+        grid-template-columns:1fr !important;
+      }
+
+      .resources-path-card,
+      .chapter-banner{
+        grid-column:auto;
+      }
+    }
+
+    @media (max-width: 680px){
+      .landing-card{
+        padding:12px 12px 18px;
+      }
+
+      .hero-panel{
+        aspect-ratio:16 / 10;
+        border-radius:20px;
+      }
+
+      .landing-main-title{
+        font-size:clamp(2.1rem, 12vw, 3.2rem);
+      }
+
+      .question-title{
+        padding:24px 20px 0;
+        font-size:clamp(2rem, 10vw, 3rem);
+      }
+
+      .question-card > .micro-copy{
+        padding:0 20px;
+      }
+
+      .question-media{
+        margin:20px 20px 18px;
+        border-radius:18px;
+      }
+
+      .question-media::before{
+        padding-top:62%;
+      }
+
+      .options{
+        padding:0 20px;
+      }
+
+      .question-actions{
+        padding:0 20px 24px;
+        align-items:stretch;
+        flex-direction:column-reverse;
+      }
+
+      .question-actions .btn{
+        width:100%;
+      }
+
+      .question-card > .form-grid{
+        width:calc(100% - 40px);
+        margin:0 20px 24px;
+      }
+
+      .country-picker{
+        padding:14px;
+        border-radius:18px;
+      }
+
+      .country-suggestions{
+        max-height:290px;
+      }
+
+      .country-option{
+        grid-template-columns:34px minmax(0, 1fr) auto;
+        gap:10px;
+      }
+
+      .country-flag{
+        width:32px;
+        height:32px;
+        font-size:20px;
+      }
+
+      .assessment-ui{
+        padding:8px;
+      }
+
+      .assessment-card{
+        border-radius:16px;
+      }
+
+      .assessment-title{
+        font-size:32px;
+      }
+
+      .pillars-overview{
+        grid-template-columns:1fr !important;
+      }
+
+      .download-report span:last-child{
+        display:none;
+      }
+    }
+
+
+
+    /* Premium V3 responsive fit refinements: mobile image integrity, wider mobile questions, centered desktop landing, and 16:9 desktop result dashboard. */
+    html, body{ min-height:100svh; overflow-x:hidden; }
+
+    @media (min-width: 861px){
+      .tsw-tool:not(.is-result-mode){ min-height:100svh; align-items:center; padding:14px; }
+      .shell:not(.is-result){ width:min(1080px, calc(100vw - 48px)); border-radius:30px; }
+      .landing-card{ max-width:1080px; padding:14px 22px 20px; }
+      .landing-progress{ height:5px; margin-bottom:12px; }
+      .hero-panel{ aspect-ratio:16 / 5.35; max-height:min(292px, 37vh); margin-bottom:14px; border-radius:24px; }
+      .hero-panel img{ object-position:center center; }
+      .content-panel{ max-width:920px; }
+      .landing-main-title{ max-width:820px; font-size:clamp(2.05rem, 3.55vw, 3.38rem); line-height:1.02; }
+      .landing-action-row{ margin-top:14px; padding:10px; border-radius:18px; }
+      .landing-action-row .field, .landing-action-row .btn{ min-height:48px; }
+    }
+
+    @media (min-width: 1101px){
+      .tsw-tool.is-result-mode{ min-height:100svh; align-items:center; justify-content:center; padding:8px; }
+      .shell.is-result{ width:min(1540px, calc(100vw - 16px)); aspect-ratio:16 / 9; max-height:calc(100svh - 16px); min-height:0; overflow:hidden; border-radius:18px; }
+      .shell.is-result #screenResult, .shell.is-result #resultMount, .shell.is-result .assessment-ui{ height:100%; min-height:0; }
+      .assessment-ui{ display:flex; flex-direction:column; gap:8px; padding:10px; }
+      .assessment-topbar{ flex:0 0 auto; margin-bottom:0; min-height:54px; padding:8px 12px; border-radius:14px; }
+      .assessment-logo{ width:40px; height:40px; }
+      .download-report{ min-height:36px; padding:8px 12px; }
+      .assessment-grid{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:minmax(0, 1fr) minmax(288px, 326px); gap:10px; align-items:stretch; }
+      .assessment-main, .assessment-sidebar{ min-height:0; height:100%; gap:10px; }
+      .assessment-main{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, .86fr); grid-template-rows:1.08fr .88fr 1.22fr .86fr; align-content:stretch; }
+      .assessment-topgrid, .pillar-summary-card, .two-column-section{ grid-column:1 / -1; }
+      .resources-path-card{ grid-column:1; }
+      .chapter-banner{ grid-column:2; }
+      .assessment-topgrid{ display:grid; grid-template-columns:minmax(0, 1.17fr) minmax(142px, .42fr) minmax(0, .86fr); gap:10px; min-height:0; align-items:stretch; }
+      .assessment-card{ min-height:0; padding:13px; border-radius:15px; box-shadow:0 10px 26px rgba(15,23,42,.045); }
+      .assessment-intro, .score-ring-card, .insight-card-ui{ min-height:0; }
+      .assessment-title{ font-size:clamp(1.7rem, 2.35vw, 2.5rem); line-height:1.03; }
+      .assessment-copy{ margin-top:7px; font-size:12.4px; line-height:1.42; }
+      .result-eyebrow-red, .result-eyebrow-green, .section-kicker, .chapter-kicker{ margin-bottom:7px; padding:4px 7px; font-size:10px; }
+      .assessment-ui .section-title{ font-size:14.5px; line-height:1.18; }
+      .insight-title{ font-size:16px !important; line-height:1.18 !important; }
+      .premium-card-icon{ width:34px; height:34px; margin-bottom:8px; border-radius:11px; font-size:18px; }
+      .score-ring{ width:112px; height:112px; }
+      .score-ring::after{ inset:8px; }
+      .score-ring-inner strong{ font-size:38px; }
+      .score-ring-label{ margin-top:6px; font-size:11.5px; line-height:1.25; }
+      .pillar-summary-card{ display:flex; flex-direction:column; }
+      .pillars-overview{ grid-template-columns:repeat(5, minmax(0, 1fr)) !important; gap:8px; flex:1 1 auto; min-height:0; }
+      .pillar-card{ min-height:0; padding:10px; border-radius:13px; gap:7px; }
+      .pillar-icon{ width:28px; height:28px; border-radius:10px; font-size:15px; }
+      .pillar-title{ font-size:11.4px; line-height:1.16; }
+      .pillar-score-big{ font-size:21px; }
+      .pillar-status{ font-size:10.4px; }
+      .mini-progress{ height:5px; }
+      .two-column-section{ min-height:0; grid-template-columns:minmax(0, .95fr) minmax(0, 1.05fr); gap:10px; }
+      .story-card{ min-height:0; overflow:hidden; }
+      .card-heading{ gap:9px; margin-bottom:8px; }
+      .small-icon{ width:32px; height:32px; border-radius:11px; font-size:16px; }
+      .working-list, .priority-list{ gap:7px; }
+      .check-row, .priority-row{ grid-template-columns:24px minmax(0, 1fr); gap:8px; padding:8px 9px; border-radius:11px; font-size:12px; line-height:1.28; }
+      .check-dot, .warn-dot{ width:21px; height:21px; border-radius:8px; font-size:12px; }
+      .green-note, .amber-note{ margin-top:8px; padding:8px 10px; border-radius:11px; font-size:11.7px; line-height:1.34; }
+      .resources-path-card{ display:flex; flex-direction:column; overflow:hidden; }
+      .resource-list-premium{ flex:1 1 auto; min-height:0; gap:8px; margin-top:9px; }
+      .resource-panel{ grid-template-columns:40px minmax(0, 1fr); gap:10px; padding:10px; border-radius:12px; }
+      .resource-icon{ width:36px; height:36px; border-radius:12px; font-size:18px; }
+      .resource-panel h3{ font-size:13.3px; line-height:1.18; }
+      .resource-panel p{ margin:4px 0 6px; font-size:11.7px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+      .resource-panel a{ font-size:12px; }
+      .book-banner{ grid-template-columns:44px minmax(0, 1fr); gap:10px; padding:12px; border-radius:15px; align-items:center; min-height:0; }
+      .book-icon{ width:38px; height:38px; border-radius:13px; font-size:18px; }
+      .book-banner h3{ font-size:14.5px; line-height:1.18; }
+      .book-banner p{ margin-top:4px; font-size:11.6px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+      .chapter-banner .btn{ grid-column:1 / -1; width:100%; min-height:34px; padding:8px 12px; border-radius:10px; font-size:12.5px; }
+      .assessment-sidebar{ display:grid; grid-template-columns:1fr !important; }
+      .moves-card-side{ position:relative; top:auto; height:100%; display:flex; flex-direction:column; overflow:hidden; }
+      .moves-card-side .assessment-copy{ margin-bottom:9px; }
+      .moves-card-side .moves-strip{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr; grid-template-rows:repeat(3, 1fr); gap:9px; }
+      .moves-card-side .move-tile{ min-height:0; display:grid; grid-template-columns:26px minmax(0, 1fr); align-content:start; gap:9px; padding:10px; border-radius:13px; }
+      .move-number{ width:22px; height:22px; border-radius:8px; font-size:11px; }
+      .move-tile strong{ font-size:12.7px; line-height:1.18; }
+      .move-tile span{ margin-top:4px; font-size:11.5px; line-height:1.28; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
+      .data-note{ flex:0 0 auto; margin:0; font-size:11px; }
+    }
+
+    @media (min-width: 1101px) and (max-height: 760px){
+      .assessment-ui{ gap:6px; padding:8px; }
+      .assessment-grid, .assessment-main, .assessment-topgrid, .two-column-section{ gap:8px; }
+      .assessment-card{ padding:11px; }
+      .assessment-topbar{ min-height:48px; padding:7px 10px; }
+      .assessment-logo{ width:36px; height:36px; }
+      .assessment-main{ grid-template-rows:1fr .78fr 1.12fr .78fr; }
+      .assessment-title{ font-size:clamp(1.55rem, 2.1vw, 2.15rem); }
+      .assessment-copy{ font-size:11.5px; line-height:1.34; }
+      .score-ring{ width:98px; height:98px; }
+      .score-ring-inner strong{ font-size:32px; }
+      .pillar-card{ padding:8px; }
+      .check-row, .priority-row{ padding:7px 8px; font-size:11.4px; }
+      .green-note, .amber-note{ font-size:11.2px; padding:7px 9px; }
+      .resource-panel p, .book-banner p{ -webkit-line-clamp:1; }
+      .move-tile span{ -webkit-line-clamp:4; }
+    }
+
+
+
+    @media (min-width: 1101px) and (max-width: 1280px){
+      .shell.is-result{ width:min(1264px, calc(100vw - 16px)); }
+      .assessment-grid{ grid-template-columns:minmax(0, 1fr) minmax(258px, 286px); gap:8px; }
+      .assessment-main{ gap:8px; grid-template-rows:.98fr .76fr 1.02fr .72fr; }
+      .assessment-topgrid{ gap:8px; grid-template-columns:minmax(0, 1.08fr) minmax(118px, .36fr) minmax(0, .8fr); }
+      .assessment-card{ padding:10px; }
+      .assessment-title{ font-size:clamp(1.5rem, 2.15vw, 2.05rem); }
+      .assessment-copy{ font-size:11.2px; line-height:1.32; }
+      .assessment-ui .section-title{ font-size:13.2px; }
+      .score-ring{ width:92px; height:92px; }
+      .score-ring-inner strong{ font-size:31px; }
+      .pillar-card{ padding:7px; }
+      .pillar-title{ font-size:10.2px; }
+      .pillar-score-big{ font-size:18px; }
+      .check-row, .priority-row{ padding:6px 7px; font-size:10.8px; }
+      .green-note, .amber-note{ padding:6px 8px; font-size:10.8px; }
+      .resource-panel{ padding:8px; }
+      .resource-panel p, .book-banner p{ -webkit-line-clamp:1; }
+      .move-tile span{ -webkit-line-clamp:4; }
+    }
+
+    @media (max-width: 680px){
+      .tsw-tool:not(.is-result-mode){ padding:0; align-items:flex-start; }
+      .shell:not(.is-result){ width:100%; max-width:100%; border-left:0; border-right:0; border-radius:0; }
+      .landing-card{ padding:10px 10px 16px; }
+      .hero-panel{ aspect-ratio:16 / 8.5; border-radius:18px; background:#fff; }
+      .hero-panel img{ object-fit:contain; object-position:center center; }
+      .narrow-panel{ width:100%; max-width:100%; padding:16px 8px 26px; }
+      .progress-head{ padding:0 4px; }
+      .progress-track{ margin-left:4px; margin-right:4px; }
+      .question-card{ border-radius:20px; }
+      .question-title{ padding:22px 14px 0; font-size:clamp(1.82rem, 9.2vw, 2.72rem); letter-spacing:-.058em; }
+      .question-card > .micro-copy{ padding:0 14px; }
+      .question-media{ margin:18px 12px 16px; border-radius:16px; background:linear-gradient(135deg,#fff8f8,#ffffff); }
+      .question-media::before{ padding-top:68%; }
+      .question-media img{ object-fit:contain; object-position:center center; }
+      .options{ padding:0 12px; gap:10px; }
+      .option-btn{ min-height:58px; padding:14px 13px; gap:11px; border-radius:16px; }
+      .option-text{ font-size:14.5px; line-height:1.34; }
+      .question-actions{ padding:0 12px 22px; }
+      .question-card > .form-grid{ width:calc(100% - 24px); margin:0 12px 22px; }
+      .country-picker{ padding:12px; border-radius:17px; }
+      .country-picker .field{ min-height:54px; font-size:16px; }
+      .country-suggestions{ max-height:min(46vh, 330px); }
+      .country-option{ min-height:52px; padding:9px 10px; border-radius:14px; }
+      .country-name{ white-space:normal; }
+    }
+
+
+    /* Premium V4 corrections: restore breathing room, follow the reference landing card, and prevent desktop over-compression. */
+    .landing-brand{
+      width:100%;
+      max-width:760px;
+      margin:14px auto 24px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .landing-brand img{
+      display:block;
+      width:84px;
+      height:auto;
+      object-fit:contain;
+    }
+
+    .landing-subtitle{
+      margin:16px 0 0;
+      color:#5f6b82;
+      line-height:1.55;
+      font-size:16px;
+      font-weight:500;
+    }
+
+    @media (min-width: 861px){
+      .tsw-tool:not(.is-result-mode){
+        min-height:100svh;
+        align-items:center;
+        justify-content:center;
+        padding:22px;
+      }
+
+      .shell.is-landing:not(.is-result){
+        width:min(930px, calc(100vw - 48px));
+        border-radius:30px;
+      }
+
+      .shell.is-quiz:not(.is-result){
+        width:min(980px, calc(100vw - 48px));
+        border-radius:28px;
+      }
+
+      .shell.is-gate:not(.is-result),
+      .shell.is-calculating:not(.is-result){
+        width:min(820px, calc(100vw - 48px));
+      }
+
+      .landing-card{
+        max-width:930px;
+        padding:18px 40px 28px;
+      }
+
+      .landing-progress{
+        max-width:760px;
+        height:6px;
+        margin:0 auto 0;
+      }
+
+      .hero-panel{
+        width:100%;
+        max-width:760px;
+        aspect-ratio:16 / 8;
+        max-height:345px;
+        margin:0 auto 26px;
+        border-radius:22px;
+      }
+
+      .hero-panel img{
+        object-fit:cover;
+        object-position:center center;
+      }
+
+      .content-panel{
+        max-width:760px;
+        align-items:flex-start;
+      }
+
+      .landing-main-title{
+        max-width:760px;
+        font-size:clamp(2.45rem, 4vw, 3.35rem);
+        line-height:1.03;
+        letter-spacing:-.055em;
+      }
+
+      .landing-action-row{
+        width:100%;
+        margin-top:24px;
+        padding:10px;
+        border-radius:18px;
+        grid-template-columns:minmax(0, 1fr) minmax(0, 1fr) auto;
+      }
+
+      .landing-action-row .field,
+      .landing-action-row .btn{
+        min-height:52px;
+      }
+
+      .landing-action-row .btn{
+        min-width:164px;
+      }
+
+      .narrow-panel{
+        max-width:980px;
+        padding:24px 30px 32px;
+      }
+
+      .question-card{
+        border-radius:24px;
+        box-shadow:0 22px 62px rgba(39,39,39,.11);
+      }
+
+      .question-title{
+        padding:28px 32px 0;
+        max-width:760px;
+        font-size:clamp(1.85rem, 3vw, 2.7rem);
+        line-height:1.08;
+        letter-spacing:-.052em;
+      }
+
+      .question-card > .micro-copy{
+        padding:0 32px;
+        font-size:14px;
+      }
+
+      .question-media{
+        margin:22px 32px 20px;
+        border-radius:20px;
+      }
+
+      .question-media::before{
+        padding-top:38%;
+      }
+
+      .question-media img{
+        object-fit:cover;
+        object-position:center center;
+      }
+
+      .options{
+        padding:0 32px;
+        gap:10px;
+      }
+
+      .option-btn{
+        min-height:58px;
+        padding:14px 16px;
+        border-radius:16px;
+      }
+
+      .option-text{
+        font-size:15px;
+      }
+
+      .question-actions{
+        padding:0 32px 30px;
+        margin-top:16px;
+      }
+
+      .question-card > .form-grid{
+        width:calc(100% - 64px);
+        margin:0 32px 30px;
+      }
+    }
+
+    @media (min-width: 1101px){
+      .tsw-tool.is-result-mode{
+        min-height:100svh;
+        align-items:flex-start;
+        justify-content:center;
+        padding:20px 14px 34px;
+      }
+
+      .shell.is-result{
+        width:min(1420px, calc(100vw - 28px));
+        aspect-ratio:auto;
+        max-height:none;
+        min-height:0;
+        overflow:visible;
+        border-radius:22px;
+      }
+
+      .shell.is-result #screenResult,
+      .shell.is-result #resultMount,
+      .shell.is-result .assessment-ui{
+        height:auto;
+        min-height:0;
+      }
+
+      .assessment-ui{
+        display:block;
+        padding:18px;
+        gap:0;
+        background:
+          radial-gradient(circle at 8% 4%, rgba(255,0,0,.07), transparent 27%),
+          radial-gradient(circle at 88% 10%, rgba(39,39,39,.07), transparent 25%),
+          linear-gradient(180deg,#f8fafc,#f1f3f7);
+      }
+
+      .assessment-topbar{
+        min-height:64px;
+        margin-bottom:16px;
+        padding:12px 16px;
+        border-radius:16px;
+      }
+
+      .assessment-logo{
+        width:48px;
+        height:48px;
+      }
+
+      .download-report{
+        min-height:42px;
+        padding:10px 16px;
+        border-radius:11px;
+        font-size:14px;
+      }
+
+      .assessment-grid{
+        display:grid;
+        grid-template-columns:minmax(0, 1fr) minmax(330px, 370px);
+        gap:16px;
+        align-items:start;
+      }
+
+      .assessment-main,
+      .assessment-sidebar{
+        display:grid;
+        gap:16px;
+        height:auto;
+        min-height:0;
+        align-content:start;
+      }
+
+      .assessment-main{
+        grid-template-columns:minmax(0, 1fr) minmax(0, .88fr);
+        grid-template-rows:auto;
+      }
+
+      .assessment-topgrid,
+      .pillar-summary-card,
+      .two-column-section{
+        grid-column:1 / -1;
+      }
+
+      .resources-path-card{
+        grid-column:1;
+      }
+
+      .chapter-banner{
+        grid-column:2;
+      }
+
+      .assessment-topgrid{
+        grid-template-columns:minmax(0, 1.18fr) minmax(210px, .48fr) minmax(0, .95fr);
+        gap:16px;
+      }
+
+      .assessment-card{
+        padding:20px;
+        border-radius:20px;
+        box-shadow:0 16px 42px rgba(15,23,42,.055);
+      }
+
+      .assessment-intro,
+      .score-ring-card,
+      .insight-card-ui{
+        min-height:230px;
+      }
+
+      .assessment-title{
+        font-size:clamp(2.35rem, 3.25vw, 3.35rem);
+        line-height:1.04;
+        letter-spacing:-.055em;
+      }
+
+      .assessment-copy{
+        margin-top:10px;
+        font-size:14px;
+        line-height:1.55;
+      }
+
+      .assessment-ui .section-title{
+        font-size:20px;
+        line-height:1.22;
+        letter-spacing:-.015em;
+      }
+
+      .insight-title{
+        font-size:22px !important;
+        line-height:1.18 !important;
+      }
+
+      .result-eyebrow-red,
+      .result-eyebrow-green,
+      .section-kicker,
+      .chapter-kicker{
+        margin-bottom:12px;
+        padding:6px 10px;
+        font-size:11px;
+      }
+
+      .premium-card-icon{
+        width:42px;
+        height:42px;
+        margin-bottom:14px;
+        border-radius:14px;
+        font-size:22px;
+      }
+
+      .score-ring{
+        width:156px;
+        height:156px;
+      }
+
+      .score-ring::after{
+        inset:11px;
+      }
+
+      .score-ring-inner strong{
+        font-size:52px;
+      }
+
+      .score-ring-label{
+        margin-top:12px;
+        font-size:14px;
+        line-height:1.35;
+      }
+
+      .pillars-overview{
+        grid-template-columns:repeat(5, minmax(0, 1fr)) !important;
+        gap:12px;
+        margin-top:14px;
+      }
+
+      .pillar-card{
+        min-height:126px;
+        padding:14px;
+        border-radius:16px;
+        gap:10px;
+      }
+
+      .pillar-icon{
+        width:34px;
+        height:34px;
+        border-radius:12px;
+        font-size:18px;
+      }
+
+      .pillar-title{
+        font-size:12.5px;
+        line-height:1.25;
+      }
+
+      .pillar-score-big{
+        font-size:26px;
+      }
+
+      .pillar-status{
+        font-size:11.5px;
+      }
+
+      .mini-progress{
+        height:6px;
+      }
+
+      .two-column-section{
+        grid-template-columns:minmax(0, .94fr) minmax(0, 1.06fr);
+        gap:16px;
+      }
+
+      .story-card{
+        overflow:visible;
+      }
+
+      .card-heading{
+        gap:12px;
+        margin-bottom:14px;
+      }
+
+      .small-icon{
+        width:40px;
+        height:40px;
+        border-radius:14px;
+        font-size:20px;
+      }
+
+      .working-list,
+      .priority-list{
+        gap:10px;
+      }
+
+      .check-row,
+      .priority-row{
+        grid-template-columns:30px minmax(0, 1fr);
+        gap:11px;
+        padding:12px;
+        border-radius:14px;
+        font-size:13.5px;
+        line-height:1.45;
+      }
+
+      .check-dot,
+      .warn-dot{
+        width:24px;
+        height:24px;
+        border-radius:10px;
+        font-size:14px;
+      }
+
+      .green-note,
+      .amber-note{
+        margin-top:12px;
+        padding:13px 14px;
+        border-radius:14px;
+        font-size:13px;
+        line-height:1.5;
+      }
+
+      .resources-path-card{
+        display:block;
+        overflow:visible;
+      }
+
+      .resource-list-premium{
+        display:grid;
+        gap:12px;
+        margin-top:16px;
+      }
+
+      .resource-panel{
+        grid-template-columns:50px minmax(0, 1fr);
+        gap:14px;
+        padding:15px;
+        border-radius:16px;
+      }
+
+      .resource-icon{
+        width:44px;
+        height:44px;
+        border-radius:14px;
+        font-size:22px;
+      }
+
+      .resource-panel h3{
+        font-size:15px;
+        line-height:1.25;
+      }
+
+      .resource-panel p{
+        margin:6px 0 10px;
+        font-size:13px;
+        line-height:1.5;
+        display:block;
+        overflow:visible;
+      }
+
+      .resource-panel a{
+        font-size:13px;
+      }
+
+      .book-banner{
+        grid-template-columns:52px minmax(0, 1fr);
+        gap:14px;
+        padding:18px;
+        border-radius:18px;
+        align-items:start;
+      }
+
+      .book-icon{
+        width:44px;
+        height:44px;
+        border-radius:15px;
+        font-size:20px;
+      }
+
+      .book-banner h3{
+        font-size:18px;
+        line-height:1.25;
+      }
+
+      .book-banner p{
+        margin-top:6px;
+        font-size:13px;
+        line-height:1.5;
+        display:block;
+        overflow:visible;
+      }
+
+      .chapter-banner .btn{
+        grid-column:1 / -1;
+        width:100%;
+        min-height:44px;
+        padding:12px 16px;
+        border-radius:12px;
+        font-size:14px;
+      }
+
+      .moves-card-side{
+        position:sticky;
+        top:18px;
+        height:auto;
+        display:block;
+        overflow:visible;
+      }
+
+      .moves-card-side .assessment-copy{
+        margin-bottom:16px;
+      }
+
+      .moves-card-side .moves-strip{
+        display:grid;
+        grid-template-columns:1fr;
+        grid-template-rows:auto;
+        gap:12px;
+      }
+
+      .moves-card-side .move-tile{
+        display:grid;
+        grid-template-columns:30px minmax(0, 1fr);
+        gap:12px;
+        padding:14px;
+        border-radius:15px;
+      }
+
+      .move-number{
+        width:24px;
+        height:24px;
+        border-radius:9px;
+        font-size:12px;
+      }
+
+      .move-tile strong{
+        font-size:14px;
+        line-height:1.25;
+      }
+
+      .move-tile span{
+        margin-top:5px;
+        font-size:13px;
+        line-height:1.42;
+        display:block;
+        overflow:visible;
+      }
+
+      .data-note{
+        margin-top:14px;
+        font-size:12px;
+      }
+    }
+
+    @media (min-width: 1101px) and (max-height: 760px){
+      .shell.is-result{
+        aspect-ratio:auto;
+        max-height:none;
+        overflow:visible;
+      }
+
+      .assessment-ui{
+        padding:16px;
+        gap:0;
+      }
+
+      .assessment-grid,
+      .assessment-main,
+      .assessment-topgrid,
+      .two-column-section{
+        gap:14px;
+      }
+
+      .assessment-card{
+        padding:18px;
+      }
+
+      .assessment-title{
+        font-size:clamp(2.1rem, 3vw, 3rem);
+      }
+
+      .assessment-copy{
+        font-size:13.5px;
+        line-height:1.5;
+      }
+
+      .score-ring{
+        width:146px;
+        height:146px;
+      }
+
+      .score-ring-inner strong{
+        font-size:48px;
+      }
+
+      .resource-panel p,
+      .book-banner p,
+      .move-tile span{
+        display:block;
+        overflow:visible;
+      }
+    }
+
+    @media (min-width: 1101px) and (max-width: 1280px){
+      .shell.is-result{
+        width:min(1180px, calc(100vw - 28px));
+      }
+
+      .assessment-grid{
+        grid-template-columns:1fr;
+      }
+
+      .assessment-sidebar{
+        grid-template-columns:1fr !important;
+      }
+
+      .moves-card-side{
+        position:relative;
+        top:auto;
+      }
+
+      .moves-card-side .moves-strip{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px){
+      .tsw-tool:not(.is-result-mode){
+        padding:0;
+        align-items:flex-start;
+      }
+
+      .shell:not(.is-result){
+        width:100%;
+        max-width:100%;
+        border-left:0;
+        border-right:0;
+        border-radius:0;
+      }
+
+      .landing-brand{
+        margin:12px auto 18px;
+        padding:0 4px;
+      }
+
+      .landing-brand img{
+        width:72px;
+      }
+
+      .landing-card{
+        padding:10px 12px 18px;
+      }
+
+      .landing-progress{
+        margin-bottom:0;
+      }
+
+      .hero-panel{
+        aspect-ratio:16 / 9;
+        border-radius:18px;
+        background:#fff;
+        margin-bottom:22px;
+      }
+
+      .hero-panel img{
+        object-fit:contain;
+        object-position:center center;
+      }
+
+      .content-panel{
+        padding:0 2px 4px;
+      }
+
+      .landing-main-title{
+        font-size:clamp(2.05rem, 10vw, 3rem);
+        line-height:1.05;
+      }
+
+      .landing-subtitle{
+        margin-top:12px;
+        font-size:14px;
+      }
+
+      .narrow-panel{
+        width:100%;
+        max-width:100%;
+        padding:16px 8px 26px;
+      }
+
+      .progress-head{
+        padding:0 4px;
+      }
+
+      .progress-track{
+        margin-left:4px;
+        margin-right:4px;
+      }
+
+      .question-card{
+        border-radius:20px;
+      }
+
+      .question-title{
+        padding:22px 14px 0;
+        font-size:clamp(1.82rem, 9.2vw, 2.72rem);
+        letter-spacing:-.058em;
+      }
+
+      .question-card > .micro-copy{
+        padding:0 14px;
+      }
+
+      .question-media{
+        margin:18px 12px 16px;
+        border-radius:16px;
+        background:linear-gradient(135deg,#fff8f8,#ffffff);
+      }
+
+      .question-media::before{
+        padding-top:68%;
+      }
+
+      .question-media img{
+        object-fit:contain;
+        object-position:center center;
+      }
+
+      .options{
+        padding:0 12px;
+        gap:10px;
+      }
+
+      .option-btn{
+        min-height:58px;
+        padding:14px 13px;
+        gap:11px;
+        border-radius:16px;
+      }
+
+      .option-text{
+        font-size:14.5px;
+        line-height:1.34;
+      }
+
+      .question-actions{
+        padding:0 12px 22px;
+        align-items:stretch;
+        flex-direction:column-reverse;
+      }
+
+      .question-actions .btn{
+        width:100%;
+      }
+
+      .question-card > .form-grid{
+        width:calc(100% - 24px);
+        margin:0 12px 22px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="tsw-tool" id="tswTool">
+    <main class="shell" aria-live="polite">
+      <section id="screenLanding" class="screen active" aria-label="Landing page">
+        <div class="landing-card">
+          <div class="landing-progress" aria-hidden="true"><span></span></div>
+          <div class="landing-brand" aria-hidden="true"><img src="https://static.wixstatic.com/media/d1daaa_9635e5ec777d4059a16fdd68009daac8~mv2.png" alt="" /></div>
+          <div class="hero-panel" aria-hidden="true">
+            <img src="https://static.wixstatic.com/media/d1daaa_a4dba8d94aba4c9a930de04f9ab567ed~mv2.png" alt="" loading="eager" />
+          </div>
+          <div class="content-panel">
+            <h1 class="title landing-main-title">Where is your program most likely to stall next?</h1>
+            <p class="landing-subtitle">Go with your first instinct. Your result appears immediately.</p>
+            <form id="landingForm" class="landing-action-row" novalidate>
+              <label>
+                <span class="visually-hidden">Name optional</span>
+                <input id="leadName" class="field" autocomplete="name" placeholder="Name (optional)" />
+              </label>
+              <label>
+                <span class="visually-hidden">Organization optional</span>
+                <input id="leadOrg" class="field" autocomplete="organization" placeholder="Organization (optional)" />
+              </label>
+              <button class="btn primary" type="submit">Let&#39;s find out →</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="screenQuiz" class="screen" aria-label="Quiz">
+        <div class="narrow-panel">
+          <div class="progress-head">
+            <div id="progressPill" class="progress-pill">Question 1 of 10</div>
+            <div class="helper-note">Go with your first instinct.</div>
+          </div>
+          <div class="progress-track" aria-hidden="true"><div id="progressBar" class="progress-bar"></div></div>
+          <div id="questionMount"></div>
+        </div>
+      </section>
+
+      <section id="screenGate" class="screen" aria-label="Email gate">
+        <div class="narrow-panel">
+          <div class="gate-card">
+            <div class="eyebrow">Almost there</div>
+            <h2 id="gateHeadline" class="screen-title">Your bottleneck is loading.</h2>
+            <div id="gateChip" class="bottleneck-chip">Most exposed pillar</div>
+            <p class="body-copy">Enter your email to unlock what that means, what to do next, and the exact kit you can use this week. You'll see the full results right away + get a copy by email.</p>
+            <form id="emailForm" class="form-grid" novalidate>
+              <label>
+                <span class="field-label">Email address</span>
+                <input id="emailInput" class="field" type="email" autocomplete="email" placeholder="you@example.com" required />
+              </label>
+              <label class="consent-row">
+                <input id="emailConsent" type="checkbox" />
+                <span>We use this to send your result on email. You can unsubscribe anytime.</span>
+              </label>
+              <input id="websiteField" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <button id="unlockBtn" class="btn primary full" type="submit">Unlock my result →</button>
+              <button id="gateBackBtn" class="btn ghost" type="button">Back to questions</button>
+              <div id="gateMsg" class="msg" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="screenCalculating" class="screen" aria-label="Calculating result">
+        <div class="calc-card">
+          <div class="eyebrow">Diagnosis</div>
+          <h2 class="screen-title">Reading the signal.</h2>
+          <div class="calc-box" id="calcLines">
+            <div class="calc-line"><span class="dot"></span><span>Reading your answers…</span></div>
+            <div class="calc-line"><span class="dot"></span><span>Finding the weak spot…</span></div>
+            <div class="calc-line"><span class="dot"></span><span>Matching the right kit…</span></div>
+            <div class="calc-line"><span class="dot"></span><span>Pulling your chapter path…</span></div>
+            <div class="calc-line"><span class="dot"></span><span>Done.</span></div>
+          </div>
+          <div class="result-actions" style="justify-content:center;">
+            <button id="seeResultBtn" class="btn primary hidden" type="button">See my result →</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screenResult" class="screen" aria-label="Result page">
+        <div id="resultMount" class="result-panel"></div>
+      </section>
+    </main>
+  </div>
+
+  <datalist id="countryList"></datalist>
+
+  <script>
+  (function(){
+    'use strict';
+
+    const CONFIG = {
+      HERO_IMAGE_URL: 'https://static.wixstatic.com/media/d1daaa_a4dba8d94aba4c9a930de04f9ab567ed~mv2.png',
+      LOGO_URL: 'https://static.wixstatic.com/media/d1daaa_9635e5ec777d4059a16fdd68009daac8~mv2.png',
+      BOOK_URL: 'https://www.thesingaporeway.com/thebook',
+
+      // Paste your deployed Google Apps Script Web App URL here.
+      // The tool works without it, but the Google Sheet database starts logging only after this is replaced.
+      GOOGLE_SHEETS_WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbx5x1ad7EH3tQtZG2IxY1wLSF4qjocW2BaHeM27XLHgYLtK40cVqm2vt5VG9iaELwyiKw/exec',
+
+      // Optional Mailchimp integration.
+      // Use the embedded form POST JSON URL, ending in /subscribe/post-json?...&id=...
+      // Example shape only: https://xxxxx.us1.list-manage.com/subscribe/post-json?u=abc&id=def
+      MAILCHIMP_POST_JSON_URL: 'https://thefalafeltheory.us22.list-manage.com/subscribe/post-json?u=44c6260e44554e7b992e09185&id=083452c971',
+      MAILCHIMP_HONEYPOT_FIELD: 'b_44c6260e44554e7b992e09185_083452c971',
+      MAILCHIMP_MERGE_FIELDS: {
+        email: 'EMAIL',
+        firstName: 'FNAME',
+        organization: 'ORG',
+        weakestPillar: 'WEAKEST',
+        score: 'SCORE'
+      },
+      // Mailchimp embedded forms usually require numeric tag IDs here, not tag names.
+      MAILCHIMP_TAG_IDS: {
+        'Offer A': '575',
+        'Offer B': '576',
+        'Offer C': '577',
+        'Offer D': '578',
+        'Offer E': '579',
+        'Tool Nurture Sequence': ''
+      }
+    };
+
+    const QUESTION_IMAGES = {
+      role: CONFIG.HERO_IMAGE_URL,
+      country: CONFIG.HERO_IMAGE_URL,
+      stage: CONFIG.HERO_IMAGE_URL,
+      execution: CONFIG.HERO_IMAGE_URL,
+      systems: CONFIG.HERO_IMAGE_URL,
+      economy: CONFIG.HERO_IMAGE_URL,
+      talent: CONFIG.HERO_IMAGE_URL,
+      governance: CONFIG.HERO_IMAGE_URL,
+      urgent_need: CONFIG.HERO_IMAGE_URL,
+      desired_outcome: CONFIG.HERO_IMAGE_URL
+    };
+
+    const COUNTRIES = [{"code":"AF","name":"Afghanistan"},{"code":"AL","name":"Albania"},{"code":"DZ","name":"Algeria"},{"code":"AS","name":"American Samoa"},{"code":"AD","name":"Andorra"},{"code":"AO","name":"Angola"},{"code":"AI","name":"Anguilla"},{"code":"AQ","name":"Antarctica"},{"code":"AG","name":"Antigua and Barbuda"},{"code":"AR","name":"Argentina"},{"code":"AM","name":"Armenia"},{"code":"AW","name":"Aruba"},{"code":"AU","name":"Australia"},{"code":"AT","name":"Austria"},{"code":"AZ","name":"Azerbaijan"},{"code":"BS","name":"Bahamas"},{"code":"BH","name":"Bahrain"},{"code":"BD","name":"Bangladesh"},{"code":"BB","name":"Barbados"},{"code":"BY","name":"Belarus"},{"code":"BE","name":"Belgium"},{"code":"BZ","name":"Belize"},{"code":"BJ","name":"Benin"},{"code":"BM","name":"Bermuda"},{"code":"BT","name":"Bhutan"},{"code":"BO","name":"Bolivia"},{"code":"BQ","name":"Bonaire, Sint Eustatius and Saba"},{"code":"BA","name":"Bosnia and Herzegovina"},{"code":"BW","name":"Botswana"},{"code":"BV","name":"Bouvet Island"},{"code":"BR","name":"Brazil"},{"code":"IO","name":"British Indian Ocean Territory"},{"code":"VG","name":"British Virgin Islands"},{"code":"BN","name":"Brunei Darussalam"},{"code":"BG","name":"Bulgaria"},{"code":"BF","name":"Burkina Faso"},{"code":"BI","name":"Burundi"},{"code":"CV","name":"Cabo Verde"},{"code":"KH","name":"Cambodia"},{"code":"CM","name":"Cameroon"},{"code":"CA","name":"Canada"},{"code":"KY","name":"Cayman Islands"},{"code":"CF","name":"Central African Republic"},{"code":"TD","name":"Chad"},{"code":"CL","name":"Chile"},{"code":"CN","name":"China"},{"code":"CX","name":"Christmas Island"},{"code":"CC","name":"Cocos (Keeling) Islands"},{"code":"CO","name":"Colombia"},{"code":"KM","name":"Comoros"},{"code":"CG","name":"Congo"},{"code":"CK","name":"Cook Islands"},{"code":"CR","name":"Costa Rica"},{"code":"HR","name":"Croatia"},{"code":"CU","name":"Cuba"},{"code":"CW","name":"Curaçao"},{"code":"CY","name":"Cyprus"},{"code":"CZ","name":"Czechia"},{"code":"CI","name":"Côte d'Ivoire"},{"code":"CD","name":"Democratic Republic of the Congo"},{"code":"DK","name":"Denmark"},{"code":"DJ","name":"Djibouti"},{"code":"DM","name":"Dominica"},{"code":"DO","name":"Dominican Republic"},{"code":"EC","name":"Ecuador"},{"code":"EG","name":"Egypt"},{"code":"SV","name":"El Salvador"},{"code":"GQ","name":"Equatorial Guinea"},{"code":"ER","name":"Eritrea"},{"code":"EE","name":"Estonia"},{"code":"SZ","name":"Eswatini"},{"code":"ET","name":"Ethiopia"},{"code":"FK","name":"Falkland Islands"},{"code":"FO","name":"Faroe Islands"},{"code":"FJ","name":"Fiji"},{"code":"FI","name":"Finland"},{"code":"FR","name":"France"},{"code":"GF","name":"French Guiana"},{"code":"PF","name":"French Polynesia"},{"code":"TF","name":"French Southern Territories"},{"code":"GA","name":"Gabon"},{"code":"GM","name":"Gambia"},{"code":"GE","name":"Georgia"},{"code":"DE","name":"Germany"},{"code":"GH","name":"Ghana"},{"code":"GI","name":"Gibraltar"},{"code":"GR","name":"Greece"},{"code":"GL","name":"Greenland"},{"code":"GD","name":"Grenada"},{"code":"GP","name":"Guadeloupe"},{"code":"GU","name":"Guam"},{"code":"GT","name":"Guatemala"},{"code":"GG","name":"Guernsey"},{"code":"GN","name":"Guinea"},{"code":"GW","name":"Guinea-Bissau"},{"code":"GY","name":"Guyana"},{"code":"HT","name":"Haiti"},{"code":"HM","name":"Heard Island and McDonald Islands"},{"code":"VA","name":"Holy See (Vatican City State)"},{"code":"HN","name":"Honduras"},{"code":"HK","name":"Hong Kong"},{"code":"HU","name":"Hungary"},{"code":"IS","name":"Iceland"},{"code":"IN","name":"India"},{"code":"ID","name":"Indonesia"},{"code":"IR","name":"Iran"},{"code":"IQ","name":"Iraq"},{"code":"IE","name":"Ireland"},{"code":"IM","name":"Isle of Man"},{"code":"IL","name":"Israel"},{"code":"IT","name":"Italy"},{"code":"JM","name":"Jamaica"},{"code":"JP","name":"Japan"},{"code":"JE","name":"Jersey"},{"code":"JO","name":"Jordan"},{"code":"KZ","name":"Kazakhstan"},{"code":"KE","name":"Kenya"},{"code":"KI","name":"Kiribati"},{"code":"KW","name":"Kuwait"},{"code":"KG","name":"Kyrgyzstan"},{"code":"LA","name":"Laos"},{"code":"LV","name":"Latvia"},{"code":"LB","name":"Lebanon"},{"code":"LS","name":"Lesotho"},{"code":"LR","name":"Liberia"},{"code":"LY","name":"Libya"},{"code":"LI","name":"Liechtenstein"},{"code":"LT","name":"Lithuania"},{"code":"LU","name":"Luxembourg"},{"code":"MO","name":"Macao"},{"code":"MG","name":"Madagascar"},{"code":"MW","name":"Malawi"},{"code":"MY","name":"Malaysia"},{"code":"MV","name":"Maldives"},{"code":"ML","name":"Mali"},{"code":"MT","name":"Malta"},{"code":"MH","name":"Marshall Islands"},{"code":"MQ","name":"Martinique"},{"code":"MR","name":"Mauritania"},{"code":"MU","name":"Mauritius"},{"code":"YT","name":"Mayotte"},{"code":"MX","name":"Mexico"},{"code":"FM","name":"Micronesia, Federated States of"},{"code":"MD","name":"Moldova"},{"code":"MC","name":"Monaco"},{"code":"MN","name":"Mongolia"},{"code":"ME","name":"Montenegro"},{"code":"MS","name":"Montserrat"},{"code":"MA","name":"Morocco"},{"code":"MZ","name":"Mozambique"},{"code":"MM","name":"Myanmar"},{"code":"NA","name":"Namibia"},{"code":"NR","name":"Nauru"},{"code":"NP","name":"Nepal"},{"code":"NL","name":"Netherlands"},{"code":"NC","name":"New Caledonia"},{"code":"NZ","name":"New Zealand"},{"code":"NI","name":"Nicaragua"},{"code":"NE","name":"Niger"},{"code":"NG","name":"Nigeria"},{"code":"NU","name":"Niue"},{"code":"NF","name":"Norfolk Island"},{"code":"KP","name":"North Korea"},{"code":"MK","name":"North Macedonia"},{"code":"MP","name":"Northern Mariana Islands"},{"code":"NO","name":"Norway"},{"code":"OM","name":"Oman"},{"code":"PK","name":"Pakistan"},{"code":"PW","name":"Palau"},{"code":"PS","name":"Palestine"},{"code":"PA","name":"Panama"},{"code":"PG","name":"Papua New Guinea"},{"code":"PY","name":"Paraguay"},{"code":"PE","name":"Peru"},{"code":"PH","name":"Philippines"},{"code":"PN","name":"Pitcairn"},{"code":"PL","name":"Poland"},{"code":"PT","name":"Portugal"},{"code":"PR","name":"Puerto Rico"},{"code":"QA","name":"Qatar"},{"code":"RO","name":"Romania"},{"code":"RU","name":"Russia"},{"code":"RW","name":"Rwanda"},{"code":"RE","name":"Réunion"},{"code":"BL","name":"Saint Barthélemy"},{"code":"SH","name":"Saint Helena, Ascension and Tristan da Cunha"},{"code":"KN","name":"Saint Kitts and Nevis"},{"code":"LC","name":"Saint Lucia"},{"code":"MF","name":"Saint Martin (French part)"},{"code":"PM","name":"Saint Pierre and Miquelon"},{"code":"VC","name":"Saint Vincent and the Grenadines"},{"code":"WS","name":"Samoa"},{"code":"SM","name":"San Marino"},{"code":"ST","name":"Sao Tome and Principe"},{"code":"SA","name":"Saudi Arabia"},{"code":"SN","name":"Senegal"},{"code":"RS","name":"Serbia"},{"code":"SC","name":"Seychelles"},{"code":"SL","name":"Sierra Leone"},{"code":"SG","name":"Singapore"},{"code":"SX","name":"Sint Maarten (Dutch part)"},{"code":"SK","name":"Slovakia"},{"code":"SI","name":"Slovenia"},{"code":"SB","name":"Solomon Islands"},{"code":"SO","name":"Somalia"},{"code":"ZA","name":"South Africa"},{"code":"GS","name":"South Georgia and the South Sandwich Islands"},{"code":"KR","name":"South Korea"},{"code":"SS","name":"South Sudan"},{"code":"ES","name":"Spain"},{"code":"LK","name":"Sri Lanka"},{"code":"SD","name":"Sudan"},{"code":"SR","name":"Suriname"},{"code":"SJ","name":"Svalbard and Jan Mayen"},{"code":"SE","name":"Sweden"},{"code":"CH","name":"Switzerland"},{"code":"SY","name":"Syria"},{"code":"TW","name":"Taiwan"},{"code":"TJ","name":"Tajikistan"},{"code":"TZ","name":"Tanzania"},{"code":"TH","name":"Thailand"},{"code":"TL","name":"Timor-Leste"},{"code":"TG","name":"Togo"},{"code":"TK","name":"Tokelau"},{"code":"TO","name":"Tonga"},{"code":"TT","name":"Trinidad and Tobago"},{"code":"TN","name":"Tunisia"},{"code":"TM","name":"Turkmenistan"},{"code":"TC","name":"Turks and Caicos Islands"},{"code":"TV","name":"Tuvalu"},{"code":"TR","name":"Türkiye"},{"code":"UM","name":"U.S. Minor Outlying Islands"},{"code":"VI","name":"U.S. Virgin Islands"},{"code":"UG","name":"Uganda"},{"code":"UA","name":"Ukraine"},{"code":"AE","name":"United Arab Emirates"},{"code":"GB","name":"United Kingdom"},{"code":"US","name":"United States"},{"code":"UY","name":"Uruguay"},{"code":"UZ","name":"Uzbekistan"},{"code":"VU","name":"Vanuatu"},{"code":"VE","name":"Venezuela"},{"code":"VN","name":"Vietnam"},{"code":"WF","name":"Wallis and Futuna"},{"code":"EH","name":"Western Sahara"},{"code":"YE","name":"Yemen"},{"code":"ZM","name":"Zambia"},{"code":"ZW","name":"Zimbabwe"},{"code":"AX","name":"Åland Islands"},{"code":"XX","name":"Other / not listed"},{"code":"ZZ","name":"Prefer not to say"}];
+
+    const PILLARS = [
+      { key:'governance', label:'Governance & Integrity', scoreQuestion:'governance', weakestPriority:1, strongestPriority:5, offerTag:'Offer A', route:'governance' },
+      { key:'execution', label:'Execution Speed', scoreQuestion:'execution', weakestPriority:2, strongestPriority:4, offerTag:'Offer B', route:'execution' },
+      { key:'talent', label:'Talent & Trust', scoreQuestion:'talent', weakestPriority:3, strongestPriority:3, offerTag:'Offer C', route:'talent' },
+      { key:'systems', label:'Systems & Infrastructure', scoreQuestion:'systems', weakestPriority:4, strongestPriority:2, offerTag:'Offer D', route:'systems' },
+      { key:'economy', label:'Economy & Openness', scoreQuestion:'economy', weakestPriority:5, strongestPriority:1, offerTag:'Offer E', route:'economy' }
+    ];
+
+    const BAND_TEXT = [
+      { min:0, max:40, label:'Foundation Zone', text:'Your program is still building its base layer. The risk now is trying to solve everything before credibility, rhythm, and trust exist.' },
+      { min:41, max:60, label:'Assembling the Engine', text:'You have direction. What you\'re still building is the system that turns approval into delivery.' },
+      { min:61, max:75, label:'Gaining Momentum', text:'Past the fragile early stage. The danger now is that one neglected pillar quietly caps everything else.' },
+      { min:76, max:88, label:'Compounding Effect', text:'No longer solving for activation. You\'re solving for permanence.' },
+      { min:89, max:100, label:'Near-Singapore Territory', text:'Rare territory. The work now is less about fixing and more about transferring what works.' }
+    ];
+
+    const QUESTIONS = [
+      {
+        id:'role', number:1, type:'choice', scored:false,
+        prompt:'Which best describes you?',
+        options:[
+          { value:'delivery', text:'I run delivery — delivery unit, reform office, or vision program' },
+          { value:'zone', text:'I run a zone — SEZ, free zone, smart city, or new-city authority' },
+          { value:'advisor', text:'I advise the top — senior advisor, chief of staff, or strategy lead in government' },
+          { value:'other', text:'Other — consultant, researcher, journalist, or adjacent' }
+        ]
+      },
+      {
+        id:'country', number:2, type:'country', scored:false,
+        prompt:'Where are you working?',
+        note:'Helps me benchmark your result.'
+      },
+      {
+        id:'stage', number:3, type:'choice', scored:false,
+        prompt:'Where is the program in its life?',
+        options:[
+          { value:'pre_launch', text:'Pre-launch — still designing' },
+          { value:'early_execution', text:'Early execution — year 1–2' },
+          { value:'mid_execution', text:'Mid-execution — year 3–5' },
+          { value:'mature', text:'Mature — year 6+' },
+          { value:'resetting', text:'Repositioning or resetting' }
+        ]
+      },
+      {
+        id:'execution', number:4, type:'choice', scored:true, pillar:'execution',
+        transitionBefore:'Now the diagnostic — 5 questions about how your system actually behaves under pressure.',
+        prompt:'When a reform gets approved, how long until something real changes on the ground?',
+        options:[
+          { value:1, text:'Over 2 years. Many approvals never become delivery.' },
+          { value:2, text:'1–2 years. Slowly and unevenly.' },
+          { value:3, text:'6–12 months. Priority reforms move with follow-through.' },
+          { value:4, text:'Under 6 months for pilots. We learn fast.' }
+        ]
+      },
+      {
+        id:'systems', number:5, type:'choice', scored:true, pillar:'systems',
+        prompt:'When the minister asks for progress, how many versions of the truth appear?',
+        options:[
+          { value:1, text:'Every ministry brings their own deck.' },
+          { value:2, text:'We try to align, but data still sits in silos.' },
+          { value:3, text:'Most priority reforms are in one view, with some gaps.' },
+          { value:4, text:'One plan. One dashboard. One rhythm.' }
+        ]
+      },
+      {
+        id:'economy', number:6, type:'choice', scored:true, pillar:'economy',
+        prompt:'What\'s slowing private-sector momentum right now?',
+        options:[
+          { value:1, text:'Too many things at once — permits, policy, infrastructure, incentives.' },
+          { value:2, text:'Momentum exists, but friction still slows real movement.' },
+          { value:3, text:'Big investors can navigate it. Smaller entrants still struggle.' },
+          { value:4, text:'The environment is credible enough that momentum usually survives friction.' }
+        ]
+      },
+      {
+        id:'talent', number:7, type:'choice', scored:true, pillar:'talent',
+        prompt:'Does the system reward people who perform?',
+        options:[
+          { value:1, text:'No. Effort doesn\'t reliably lead to trust, growth, or opportunity.' },
+          { value:2, text:'Sometimes. Good people still get stuck or lose faith.' },
+          { value:3, text:'Mostly. It\'s demanding, but there\'s a path.' },
+          { value:4, text:'Yes. Capability and belief reinforce each other.' }
+        ]
+      },
+      {
+        id:'governance', number:8, type:'choice', scored:true, pillar:'governance',
+        prompt:'How do senior appointments actually get decided?',
+        options:[
+          { value:1, text:'Mostly by connections, loyalty, and politics.' },
+          { value:2, text:'We\'re shifting toward merit, but connections still carry weight.' },
+          { value:3, text:'Merit is the default. Politics sometimes overrides it.' },
+          { value:4, text:'Transparent, merit-based, stable across leadership changes.' }
+        ]
+      },
+      {
+        id:'urgent_need', number:9, type:'choice', scored:false,
+        transitionBefore:'Two more. These shape what I recommend.',
+        prompt:'If I could help with one thing before your next review, what would it be?',
+        options:[
+          { value:'governance_credibility', pillar:'governance', text:'Governance credibility and decision stability' },
+          { value:'delivery_speed', pillar:'execution', text:'Delivery speed and follow-through' },
+          { value:'talent_confidence', pillar:'talent', text:'Talent retention and public confidence' },
+          { value:'coordination', pillar:'systems', text:'Cross-ministry coordination' },
+          { value:'private_momentum', pillar:'economy', text:'Private-sector momentum' }
+        ]
+      },
+      {
+        id:'desired_outcome', number:10, type:'choice', scored:false,
+        prompt:'What would a meaningful win actually look like in the next 12 months?',
+        options:[
+          { value:'visible_wins', pillar:'execution', text:'Visible wins that change the mood' },
+          { value:'survives_changes', pillar:'governance', text:'A delivery system that survives leadership changes' },
+          { value:'investor_confidence', pillar:'economy', text:'Investor confidence and stronger private-sector movement' },
+          { value:'coordination', pillar:'systems', text:'Stronger coordination across ministries' },
+          { value:'talent_retention', pillar:'talent', text:'Better talent retention and public confidence' }
+        ]
+      }
+    ];
+
+    const RESULT_BLOCKS = {
+      governance: {
+        heading:'Governance & Integrity',
+        chapter:'Chapter 1 — Leadership and Governance: Stability Through Vision',
+        diagnosis:'Your program may still look active, but fragile governance taxes every decision beneath it. When appointments, accountability, or rules feel too changeable, execution slows, trust weakens, and even good reforms become harder to defend.',
+        moves:[
+          'Map where continuity is most vulnerable — appointments, approvals, or accountability.',
+          'Pick one visible rule or service promise and apply it consistently for 30 days.',
+          'Start one small trust signal — a short progress note, a delivery tracker, or a public scorecard.'
+        ],
+        kit:{ title:'Leadership & Governance Localization Guide', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_6c227ab8949d46dea0dca994b356f88e.pdf', note:'Start with the diagnosis and principle-adaptation sections. Not the workshops. First clarify what to adapt, what not to copy, and where continuity is weakest.' },
+        study:{ title:'Chapter 1 — From Chaos to Clockwork', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_7fab60df276c4e26a2416329189a526c.pdf', note:'Read the setup, the turning point, and the closing lesson. Then ask: what\'s the equivalent backbone move in our context?' },
+        teaser:'A program can look busy from the outside and still be fragile underneath. This chapter is about the hidden architecture of serious transformation: continuity, merit, rule of law, and the kind of leadership that gives reforms something solid to stand on. What Singapore actually did — and what went wrong the first time they tried it — starts on page…'
+      },
+      execution: {
+        heading:'Execution Speed',
+        chapter:'Chapter 3 — Economic Transformation: From Third World to First',
+        diagnosis:'The strategy exists. The drag is translation. Too much gets approved; too little becomes visible change fast enough to create belief. This is where programs start looking busy while feeling slow.',
+        moves:[
+          'Pick one reform that can produce a citizen-visible change in 90 days. Name the owner and date.',
+          'Pause or kill one approved-but-stalled initiative to release capacity and signal seriousness.',
+          'Hold a weekly delivery review around three metrics only — blockers, deadline, visible milestone.'
+        ],
+        kit:{ title:'Economic Transformation Localization Guide', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_7774f45a59b84cdaa40b4ecaaad14e2e.pdf', note:'Use it to name the one constraint slowing delivery, the one priority that matters most, and the one sequence your team can actually execute.' },
+        study:{ title:'Chapter 3 — From Struggle to Strategy', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_1278d09d447d4397ba226e7762f60309.pdf', note:'Focus on how the shift was sequenced, what was prioritized first, and how the logic moved from hardship to strategy.' },
+        teaser:'Most transformations don\'t fail in the vision deck. They fail in the handoff between approval and visible progress. This chapter is about how Singapore tightened that handoff until momentum stopped being theoretical — and it started with one move most reformers get wrong, which was…'
+      },
+      talent: {
+        heading:'Talent & Trust',
+        chapter:'Chapter 4 — Talent Development and Education: Investing in People',
+        diagnosis:'This is not a headline problem until it becomes one. When strong operators start rationing belief, the system still moves for a while — but it loses depth, honesty, and staying power.',
+        moves:[
+          'Identify the 5 people you cannot afford to lose. Ask what friction is exhausting them.',
+          'Fix one internal blocker that wastes operator energy every week.',
+          'Make one public promise you can keep quickly and report honestly.'
+        ],
+        kit:{ title:'Talent Development and Education Localization Guide', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_91100260113045f086fe7eb624502fa4.pdf', note:'Identify where your people system is thin — pipeline, development, retention, or practical capability. Then pick one intervention you can improve without waiting for a full reform cycle.' },
+        study:{ title:'Chapter 4 — Learning to Lead', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_12d8ec00e88d467c97ddd36bc6600f50.pdf', note:'Look for the logic that turned education and leadership development into state capacity, not just social policy.' },
+        teaser:'Singapore didn\'t treat talent as a side theme. It treated people as infrastructure. This chapter is about the long game behind capability and opportunity — and the specific move that turned a small island\'s talent problem into a multi-decade advantage, which came down to…'
+      },
+      systems: {
+        heading:'Systems & Infrastructure',
+        chapter:'Chapter 6 — Smart Nation: Digital Transformation and Innovation',
+        diagnosis:'Your reforms may be individually sound but collectively disconnected. The issue is not intent. It\'s the absence of a shared operating system across ministries, infrastructure, and data.',
+        moves:[
+          'Choose one corridor, district, or live reform where 2–3 ministries must work from one plan.',
+          'Build one shared dashboard with five metrics that everyone sees.',
+          'Name one integrator with authority to unblock cross-agency issues.'
+        ],
+        kit:{ title:'Smart Nation Localization Guide', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_c86d350e12c34acd90bff69725979c3d.pdf', note:'Use it to map what should be connected first, where the data handoff is breaking, and which quick integration would create the most visible operational lift.' },
+        study:{ title:'Chapter 6 — Smart Nation: Designing the Digital Future', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_9163468a5bbb4cfe906b3724dfc95af0.pdf', note:'Focus on how daily hassles were solved by connecting systems rather than multiplying isolated fixes.' },
+        teaser:'The breakthrough is rarely one more project. It\'s the moment separate systems begin to work as one. This chapter is about connected infrastructure, digital coordination, and the governance architecture that made Smart Nation actually smart — built on a single decision that most countries skip, which was to…'
+      },
+      economy: {
+        heading:'Economy & Openness',
+        chapter:'Chapter 9 — Singapore as a Business and Trade Hub',
+        diagnosis:'The problem is rarely a lack of ambition. More often it\'s that the investment story is weaker than the friction surrounding it. When policy clarity, business confidence, skills, and positioning are out of sync, private-sector momentum slows down.',
+        moves:[
+          'Interview 5 businesses or investors that almost expanded. Document the top 3 frictions.',
+          'Remove one approval loop or repeated document request.',
+          'Rewrite the proposition for one priority sector in plain language — why here, why now, why easier than peers.'
+        ],
+        kit:{ title:'Business and Trade Hub Localization Guide', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_81529d6ac660445b97ad4c2c213256ea.pdf', note:'Use it to sharpen the story you\'re telling investors, find the friction that matters most, and decide which business-environment move should happen first.' },
+        study:{ title:'Chapter 9 — Open Ports, Open Minds', url:'https://d1daaa4a-6f4b-4714-b104-ab587ca1d082.usrfiles.com/ugd/d1daaa_46d25288a2fe43609039f01674dbf762.pdf', note:'Focus on what made Singapore credible, open, and easy to do business with — then translate the logic instead of copying the surface.' },
+        teaser:'Growth compounds when the business story and the operating environment stop fighting each other. This chapter is about how credibility, openness, and practical statecraft turned Singapore into a magnet for capital — and the single positioning choice that made the difference, which was to…'
+      }
+    };
+
+    const state = {
+      sessionId: createSessionId(),
+      currentQuestionIndex: 0,
+      answers: {},
+      firstName: '',
+      organization: '',
+      email: '',
+      consent: false,
+      result: null,
+      autoTimer: null,
+      hasSubmitted: false
+    };
+
+    const $ = (selector, root) => (root || document).querySelector(selector);
+    const $$ = (selector, root) => Array.prototype.slice.call((root || document).querySelectorAll(selector));
+
+    const screens = {
+      landing: $('#screenLanding'),
+      quiz: $('#screenQuiz'),
+      gate: $('#screenGate'),
+      calculating: $('#screenCalculating'),
+      result: $('#screenResult')
+    };
+
+    const countryList = $('#countryList');
+    const questionMount = $('#questionMount');
+    const progressPill = $('#progressPill');
+    const progressBar = $('#progressBar');
+    const gateHeadline = $('#gateHeadline');
+    const gateChip = $('#gateChip');
+    const gateMsg = $('#gateMsg');
+    const unlockBtn = $('#unlockBtn');
+    const resultMount = $('#resultMount');
+
+    init();
+
+    function init(){
+      renderCountryList();
+      bindLanding();
+      bindGate();
+      bindCalculating();
+      showScreen('landing');
+    }
+
+    function bindLanding(){
+      $('#landingForm').addEventListener('submit', function(event){
+        event.preventDefault();
+        state.firstName = ($('#leadName').value || '').trim();
+        state.organization = ($('#leadOrg').value || '').trim();
+        logEvent('landing_started', { flow_stage:'landing' });
+        logEvent('quiz_started', { flow_stage:'quiz' });
+        renderQuestion();
+        showScreen('quiz');
+      });
+    }
+
+    function bindGate(){
+      $('#gateBackBtn').addEventListener('click', function(){
+        state.currentQuestionIndex = QUESTIONS.length - 1;
+        renderQuestion();
+        showScreen('quiz');
+      });
+
+      $('#emailForm').addEventListener('submit', async function(event){
+        event.preventDefault();
+        gateMsg.className = 'msg';
+        gateMsg.textContent = '';
+
+        if (($('#websiteField').value || '').trim() !== '') {
+          showCalculating();
+          return;
+        }
+
+        const email = ($('#emailInput').value || '').trim();
+        if (!isValidEmail(email)) {
+          gateMsg.className = 'msg error';
+          gateMsg.textContent = 'Please enter a valid email address.';
+          return;
+        }
+
+        if (!$('#emailConsent').checked) {
+          gateMsg.className = 'msg error';
+          gateMsg.textContent = 'Please tick the consent box to continue.';
+          return;
+        }
+
+        state.email = email;
+        state.consent = true;
+        state.hasSubmitted = true;
+        state.result = state.result || computeResult();
+
+        unlockBtn.disabled = true;
+        gateMsg.textContent = 'Preparing your result…';
+
+        const submitPayload = buildPayload('email_submitted', {
+          flow_stage:'email_gate',
+          consent:'Yes',
+          mailchimp_status: mailchimpEnabled() ? 'attempted' : 'not_configured'
+        });
+
+        logToGoogleSheets(submitPayload);
+        const mailchimpPromise = submitToMailchimp(submitPayload).catch(function(error){
+          logEvent('mailchimp_error', { flow_stage:'email_gate', note:String(error && error.message ? error.message : error) });
+        });
+
+        await Promise.race([mailchimpPromise, sleep(850)]);
+        unlockBtn.disabled = false;
+        showCalculating();
+      });
+    }
+
+    function bindCalculating(){
+      $('#seeResultBtn').addEventListener('click', function(){
+        showResult();
+      });
+    }
+
+    function showScreen(name){
+      Object.keys(screens).forEach(function(key){ screens[key].classList.remove('active'); });
+      screens[name].classList.add('active');
+      const shell = document.querySelector('.shell');
+      if (shell) {
+        shell.classList.toggle('is-result', name === 'result');
+        shell.classList.toggle('is-landing', name === 'landing');
+        shell.classList.toggle('is-quiz', name === 'quiz');
+        shell.classList.toggle('is-gate', name === 'gate');
+        shell.classList.toggle('is-calculating', name === 'calculating');
+      }
+      const toolTop = $('#tswTool');
+      if (toolTop) toolTop.classList.toggle('is-result-mode', name === 'result');
+      if (toolTop && typeof toolTop.scrollIntoView === 'function') {
+        try { toolTop.scrollIntoView({ behavior:'smooth', block:'start' }); } catch (error) { toolTop.scrollIntoView(); }
+      }
+    }
+
+    function renderCountryList(){
+      countryList.innerHTML = COUNTRIES.map(function(country){
+        return '<option value="' + escapeAttr(country.name + ' (' + country.code + ')') + '"></option>';
+      }).join('');
+    }
+
+    function renderQuestion(){
+      clearAutoTimer();
+      const q = QUESTIONS[state.currentQuestionIndex];
+      const selected = state.answers[q.id];
+      progressPill.textContent = 'Question ' + q.number + ' of ' + QUESTIONS.length;
+      progressBar.style.width = Math.round((q.number / QUESTIONS.length) * 100) + '%';
+
+      let html = '';
+      if (q.transitionBefore) {
+        html += '<div class="transition-line">' + escapeHtml(q.transitionBefore) + '</div>';
+      }
+      html += '<div class="question-card">';
+      html += '<h2 class="question-title">' + escapeHtml(q.prompt) + '</h2>';
+      if (q.note) html += '<p class="micro-copy">' + escapeHtml(q.note) + '</p>';
+      const mediaUrl = QUESTION_IMAGES[q.id] || CONFIG.HERO_IMAGE_URL;
+      html += '<div class="question-media"><img src="' + escapeAttr(mediaUrl) + '" alt="" loading="lazy" /></div>';
+
+      if (q.type === 'country') {
+        html += '<div class="form-grid country-form">';
+        html += '<div class="country-picker" data-country-picker>';
+        html += '<label><span class="field-label">Country or territory</span><span class="country-input-wrap"><input id="countryInput" class="field" placeholder="Search country or code" autocomplete="country-name" role="combobox" aria-controls="countrySuggestions" aria-expanded="true" value="' + escapeAttr(selected ? selected.text : '') + '" /></span></label>';
+        html += '<div class="country-helper">Search, then tap a country to continue. You can also type a custom location and press Continue.</div>';
+        html += '<div id="countrySuggestions" class="country-suggestions" role="listbox"></div>';
+        html += '</div>';
+        html += '<div id="countryMsg" class="msg" role="status"></div>';
+        html += '<div class="question-actions"><button class="btn ghost" type="button" id="questionBackBtn">Back</button><button class="btn primary" type="button" id="countryContinueBtn">Continue &rarr;</button></div>';
+        html += '</div>';
+      } else {
+        html += '<div class="options">';
+        q.options.forEach(function(option, index){
+          const isSelected = selected && String(selected.value) === String(option.value);
+          html += '<button class="option-btn' + (isSelected ? ' selected' : '') + '" type="button" data-value="' + escapeAttr(String(option.value)) + '">';
+          html += '<span class="option-index">' + (index + 1) + '</span>';
+          html += '<span class="option-text">' + escapeHtml(option.text) + '</span>';
+          html += '</button>';
+        });
+        html += '</div>';
+        html += '<div class="question-actions"><button class="btn ghost" type="button" id="questionBackBtn">Back</button><span class="micro-copy">Select an answer to continue.</span></div>';
+      }
+      html += '</div>';
+
+      questionMount.innerHTML = html;
+
+      const backBtn = $('#questionBackBtn', questionMount);
+      if (backBtn) backBtn.addEventListener('click', goBackFromQuestion);
+
+      if (q.type === 'country') {
+        const input = $('#countryInput', questionMount);
+        const submit = $('#countryContinueBtn', questionMount);
+        bindCountryPicker(input);
+        setTimeout(function(){ input.focus(); }, 80);
+        submit.addEventListener('click', function(){ submitCountry(input.value); });
+        input.addEventListener('keydown', function(event){
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            const first = $('#countrySuggestions [data-country-code]', questionMount);
+            if (first && input.value.trim() && !parseCountry(input.value).code) {
+              first.click();
+            } else {
+              submitCountry(input.value);
+            }
+          }
+          if (event.key === 'Escape') {
+            const suggestions = $('#countrySuggestions', questionMount);
+            if (suggestions) suggestions.innerHTML = '';
+            input.setAttribute('aria-expanded','false');
+          }
+        });
+      } else {
+        $$('.option-btn', questionMount).forEach(function(button){
+          button.addEventListener('click', function(){
+            const option = q.options.find(function(item){ return String(item.value) === String(button.getAttribute('data-value')); });
+            if (!option) return;
+            state.answers[q.id] = normalizeAnswer(q, option);
+            $$('.option-btn', questionMount).forEach(function(btn){ btn.classList.remove('selected'); });
+            button.classList.add('selected');
+            logEvent('question_answered', buildQuestionEvent(q, state.answers[q.id]));
+            state.autoTimer = setTimeout(goForwardFromQuestion, 400);
+          });
+        });
+      }
+    }
+
+    function bindCountryPicker(input){
+      const suggestions = $('#countrySuggestions', questionMount);
+      if (!input || !suggestions) return;
+
+      function sync(){
+        renderCountrySuggestions(input.value, suggestions, input);
+      }
+
+      input.addEventListener('focus', sync);
+      input.addEventListener('input', sync);
+      suggestions.addEventListener('mousedown', function(event){ event.preventDefault(); });
+      suggestions.addEventListener('click', function(event){
+        const button = event.target.closest('[data-country-code]');
+        if (!button) return;
+        const country = COUNTRIES.find(function(item){ return item.code === button.getAttribute('data-country-code'); });
+        if (!country) return;
+        input.value = country.name + ' (' + country.code + ')';
+        input.dataset.selectedCode = country.code;
+        submitCountry(input.value);
+      });
+      sync();
+    }
+
+    function renderCountrySuggestions(query, container, input){
+      const matches = getCountryMatches(query);
+      const headline = normalizeForSearch(query).length ? 'Best matches' : 'Popular starting points';
+      if (!matches.length) {
+        container.innerHTML = '<div class="country-empty">No exact match found. You can keep what you typed and press Continue.</div>';
+        input.setAttribute('aria-expanded','true');
+        return;
+      }
+      container.innerHTML = '<div class="country-suggestions-head">' + escapeHtml(headline) + '</div>' + matches.map(function(country){
+        return '<button class="country-option" type="button" role="option" data-country-code="' + escapeAttr(country.code) + '">' +
+          '<span class="country-flag" aria-hidden="true">' + escapeHtml(countryFlag(country.code)) + '</span>' +
+          '<span class="country-name">' + escapeHtml(country.name) + '</span>' +
+          '<span class="country-code">' + escapeHtml(country.code) + '</span>' +
+        '</button>';
+      }).join('');
+      input.setAttribute('aria-expanded','true');
+    }
+
+    function getCountryMatches(query){
+      const normalized = normalizeForSearch(query).replace(/\([a-z]{2}\)$/, '').trim();
+      const popularCodes = ['AE','SA','SG','US','GB','IN','ID','MY','QA','KW'];
+      if (!normalized) {
+        return popularCodes.map(function(code){ return COUNTRIES.find(function(country){ return country.code === code; }); }).filter(Boolean);
+      }
+      const alias = getCountryAliasCode(normalized);
+      if (alias) {
+        const aliasCountry = COUNTRIES.find(function(country){ return country.code === alias; });
+        if (aliasCountry) return [aliasCountry].concat(COUNTRIES.filter(function(country){ return country.code !== alias && normalizeForSearch(country.name).indexOf(normalized) !== -1; }).slice(0, 7));
+      }
+      return COUNTRIES.map(function(country){
+        const name = normalizeForSearch(country.name);
+        const code = normalizeForSearch(country.code);
+        let score = 0;
+        if (code === normalized) score = 100;
+        else if (name === normalized) score = 95;
+        else if (name.indexOf(normalized) === 0) score = 80;
+        else if (name.indexOf(normalized) !== -1) score = 55;
+        else if (code.indexOf(normalized) === 0) score = 50;
+        return { country:country, score:score };
+      }).filter(function(item){ return item.score > 0; }).sort(function(a,b){
+        if (a.score !== b.score) return b.score - a.score;
+        return a.country.name.localeCompare(b.country.name);
+      }).slice(0, 9).map(function(item){ return item.country; });
+    }
+
+    function getCountryAliasCode(normalized){
+      const aliases = {
+        'uae':'AE',
+        'u a e':'AE',
+        'emirates':'AE',
+        'ksa':'SA',
+        'saudi':'SA',
+        'saudi arabia':'SA',
+        'us':'US',
+        'usa':'US',
+        'u s a':'US',
+        'america':'US',
+        'uk':'GB',
+        'u k':'GB',
+        'britain':'GB',
+        'england':'GB'
+      };
+      return aliases[normalized] || '';
+    }
+
+    function countryFlag(code){
+      if (!code || code.length !== 2) return '';
+      try {
+        return code.toUpperCase().replace(/./g, function(char){ return String.fromCodePoint(char.charCodeAt(0) + 127397); });
+      } catch (error) {
+        return '';
+      }
+    }
+
+    function submitCountry(rawValue){
+      const msg = $('#countryMsg', questionMount);
+      const value = (rawValue || '').trim();
+      if (!value) {
+        msg.className = 'msg error';
+        msg.textContent = 'Please choose or type the country you are working in.';
+        return;
+      }
+      const country = parseCountry(value);
+      const q = QUESTIONS[state.currentQuestionIndex];
+      state.answers[q.id] = {
+        value: country.code || country.name,
+        text: country.code ? country.name + ' (' + country.code + ')' : country.name,
+        country_name: country.name,
+        country_code: country.code || '',
+        scored:false
+      };
+      logEvent('question_answered', buildQuestionEvent(q, state.answers[q.id]));
+      goForwardFromQuestion();
+    }
+
+    function goBackFromQuestion(){
+      clearAutoTimer();
+      if (state.currentQuestionIndex <= 0) {
+        showScreen('landing');
+        return;
+      }
+      state.currentQuestionIndex -= 1;
+      renderQuestion();
+    }
+
+    function goForwardFromQuestion(){
+      clearAutoTimer();
+      if (state.currentQuestionIndex >= QUESTIONS.length - 1) {
+        state.result = computeResult();
+        logEvent('quiz_completed', { flow_stage:'quiz_completed' });
+        showGate();
+        return;
+      }
+      state.currentQuestionIndex += 1;
+      renderQuestion();
+    }
+
+    function showGate(){
+      const result = state.result || computeResult();
+      gateHeadline.textContent = 'Your bottleneck is ' + result.weakest.label + '.';
+      gateChip.textContent = 'Most exposed pillar: ' + result.weakest.label;
+      showScreen('gate');
+      setTimeout(function(){ $('#emailInput').focus(); }, 80);
+    }
+
+    function showCalculating(){
+      showScreen('calculating');
+      const lines = $$('.calc-line', $('#calcLines'));
+      const button = $('#seeResultBtn');
+      button.classList.add('hidden');
+      lines.forEach(function(line){ line.classList.remove('show'); });
+      lines.forEach(function(line, index){
+        setTimeout(function(){ line.classList.add('show'); }, 320 + index * 440);
+      });
+      setTimeout(function(){
+        button.classList.remove('hidden');
+        button.focus();
+      }, 320 + lines.length * 440 + 260);
+    }
+
+    function showResult(){
+      state.result = state.result || computeResult();
+      resultMount.innerHTML = renderResult(state.result);
+      bindResultLinks();
+      logEvent('result_viewed', { flow_stage:'result' });
+      showScreen('result');
+    }
+
+    function bindResultLinks(){
+      $$('[data-log-click]', resultMount).forEach(function(link){
+        link.addEventListener('click', function(){
+          logEvent(link.getAttribute('data-log-click'), {
+            flow_stage:'result',
+            click_label: link.textContent.trim(),
+            click_url: link.getAttribute('href') || ''
+          });
+        });
+      });
+      const restart = $('#restartBtn', resultMount);
+      if (restart) restart.addEventListener('click', restartTool);
+    }
+
+    function restartTool(){
+      clearAutoTimer();
+      state.sessionId = createSessionId();
+      state.currentQuestionIndex = 0;
+      state.answers = {};
+      state.email = '';
+      state.consent = false;
+      state.result = null;
+      state.hasSubmitted = false;
+      $('#emailInput').value = '';
+      $('#emailConsent').checked = false;
+      gateMsg.textContent = '';
+      showScreen('landing');
+    }
+
+    function normalizeAnswer(question, option){
+      return {
+        value: option.value,
+        text: option.text,
+        scored: !!question.scored,
+        score_value: question.scored ? Number(option.value) : '',
+        pillar: option.pillar || question.pillar || '',
+        question_id: question.id,
+        question_number: question.number
+      };
+    }
+
+    function buildQuestionEvent(question, answer){
+      return {
+        flow_stage:'quiz',
+        question_id: question.id,
+        question_number: question.number,
+        question_text: question.prompt,
+        answer_value: answer.value,
+        answer_text: answer.text,
+        answer_pillar: answer.pillar || '',
+        answer_score_value: answer.score_value || '',
+        country_name: answer.country_name || '',
+        country_code: answer.country_code || ''
+      };
+    }
+
+    function computeResult(){
+      const pillarScores = PILLARS.map(function(pillar){
+        const answer = state.answers[pillar.scoreQuestion];
+        const raw = answer ? Number(answer.value) : 0;
+        return Object.assign({}, pillar, {
+          raw: raw,
+          score: raw * 5,
+          answerText: answer ? answer.text : ''
+        });
+      });
+
+      const totalScore = pillarScores.reduce(function(sum, pillar){ return sum + pillar.score; }, 0);
+      const band = BAND_TEXT.find(function(item){ return totalScore >= item.min && totalScore <= item.max; }) || BAND_TEXT[0];
+      const weakest = pillarScores.slice().sort(function(a,b){
+        if (a.score !== b.score) return a.score - b.score;
+        return a.weakestPriority - b.weakestPriority;
+      })[0];
+      const strongest = pillarScores.slice().sort(function(a,b){
+        if (a.score !== b.score) return b.score - a.score;
+        return a.strongestPriority - b.strongestPriority;
+      })[0];
+      const sortedWeakness = pillarScores.slice().sort(function(a,b){
+        if (a.score !== b.score) return a.score - b.score;
+        return a.weakestPriority - b.weakestPriority;
+      });
+      const secondWeakest = sortedWeakness[1] || null;
+      const gap = secondWeakest ? secondWeakest.score - weakest.score : 0;
+      const signal = getSignalStrength(gap, weakest, secondWeakest);
+      const offerTag = weakest.offerTag;
+      const block = RESULT_BLOCKS[weakest.route];
+
+      return {
+        score: totalScore,
+        band: band,
+        pillars: pillarScores,
+        weakest: weakest,
+        strongest: strongest,
+        secondWeakest: secondWeakest,
+        weaknessGap: gap,
+        signal: signal,
+        offerTag: offerTag,
+        nurtureTag: 'Tool Nurture Sequence',
+        route: weakest.route,
+        block: block
+      };
+    }
+
+    function getSignalStrength(gap, weakest, secondWeakest){
+      if (!secondWeakest || gap >= 10) {
+        return {
+          label:'Strong signal',
+          text:'One pillar is clearly carrying the most strain in this answer set.'
+        };
+      }
+      if (gap >= 5) {
+        return {
+          label:'Clear signal',
+          text:'The weakest pillar is ahead of the next risk, but the system should still watch the second exposure.'
+        };
+      }
+      return {
+        label:'Close signal',
+        text:'Two pillars are close. I route to ' + weakest.label + ' because the tie-break gives continuity and credibility first priority when risk is evenly spread.'
+      };
+    }
+
+    function renderResult(result){
+      const block = result.block;
+      const urgent = state.answers.urgent_need;
+      const pressureNote = buildPressureNote(result, urgent);
+      const exposedLabel = escapeHtml(result.weakest.label);
+      const ranked = result.pillars.slice().sort(function(a,b){
+        if (a.score !== b.score) return b.score - a.score;
+        return a.strongestPriority - b.strongestPriority;
+      });
+      const working = ranked.filter(function(pillar){ return pillar.key !== result.weakest.key; }).slice(0,3);
+      const second = result.secondWeakest;
+      const chapterLabel = block.chapter.replace(/^Chapter\s+\d+\s+[\u2014-]\s+/, '');
+      const movesHtml = block.moves.map(function(move, index){ return renderMoveTile(move, index); }).join('');
+      const pressureHtml = pressureNote ? pressureNote : 'The score and the pressure you named point toward the same operating constraint: fix the bottleneck before adding more complexity.';
+
+      return '' +
+        '<div class="assessment-ui">' +
+          '<header class="assessment-topbar">' +
+            '<div class="assessment-brand"><img class="assessment-logo" src="' + escapeAttr(CONFIG.LOGO_URL) + '" alt="The Singapore Way" /></div>' +
+            '<div class="assessment-user"><button class="btn secondary download-report" type="button" onclick="window.print()"><span class="button-icon" aria-hidden="true">' + iconSvg('download') + '</span><span>Download Report</span></button></div>' +
+          '</header>' +
+
+          '<div class="assessment-grid">' +
+            '<main class="assessment-main">' +
+              '<section class="assessment-topgrid">' +
+                '<article class="assessment-card assessment-intro">' +
+                  '<div class="result-eyebrow-red">Your result</div>' +
+                  '<h1 class="assessment-title">' + escapeHtml(result.band.label) + '</h1>' +
+                  '<p class="assessment-copy">' + escapeHtml(result.band.text) + '</p>' +
+                  '<p class="assessment-copy">The story is not that the program lacks ambition. The signal points to one constraint taxing the rest of the system: <strong>' + exposedLabel + '</strong>.</p>' +
+                '</article>' +
+
+                '<article class="assessment-card score-ring-card">' +
+                  '<div class="score-ring" style="--score:' + result.score + '"><div class="score-ring-inner"><strong>' + result.score + '</strong><span>/100</span></div></div>' +
+                  '<div class="score-ring-label">Overall Score<br><strong>' + escapeHtml(result.band.label) + '</strong></div>' +
+                '</article>' +
+
+                '<article class="assessment-card compact insight-card-ui">' +
+                  '<div class="premium-card-icon" aria-hidden="true">' + iconSvg('spark') + '</div>' +
+                  '<div class="result-eyebrow-red">Key insight</div>' +
+                  '<h2 class="section-title insight-title">Your program is most exposed in ' + exposedLabel + '.</h2>' +
+                  '<p class="assessment-copy">Remove this constraint before adding more motion. That is the fastest path from activity to visible momentum.</p>' +
+                '</article>' +
+              '</section>' +
+
+              '<section class="assessment-card pillar-summary-card">' +
+                '<div class="card-heading"><span class="small-icon resource" aria-hidden="true">' + iconSvg('compass') + '</span><h2 class="section-title">Five Pillars Overview</h2></div>' +
+                '<div class="pillars-overview">' + result.pillars.map(function(pillar){ return renderPillarOverview(pillar, result.weakest.key); }).join('') + '</div>' +
+              '</section>' +
+
+              '<section class="two-column-section">' +
+                '<article class="assessment-card story-card working-card">' +
+                  '<div class="card-heading"><span class="small-icon good" aria-hidden="true">' + iconSvg('check') + '</span><h2 class="section-title">What\'s Working Well</h2></div>' +
+                  '<div class="working-list">' + working.map(function(pillar){ return '<div class="check-row"><span class="check-dot" aria-hidden="true">' + iconSvg('check') + '</span><div><strong>' + escapeHtml(pillar.label) + ':</strong> ' + escapeHtml(getWorkingLine(pillar)) + '</div></div>'; }).join('') + '</div>' +
+                  '<div class="green-note">These strengths are the lift. Use them to create confidence while the bottleneck is being removed.</div>' +
+                '</article>' +
+
+                '<article class="assessment-card story-card priority-card">' +
+                  '<div class="card-heading"><span class="small-icon warn" aria-hidden="true">' + iconSvg('alert') + '</span><h2 class="section-title">Priority Story to Address</h2></div>' +
+                  '<div class="priority-list">' +
+                    '<div class="priority-row"><span class="warn-dot" aria-hidden="true">' + iconSvg('alert') + '</span><div><strong>' + exposedLabel + '</strong> is the current bottleneck.</div></div>' +
+                    (second ? '<div class="priority-row"><span class="warn-dot" aria-hidden="true">' + iconSvg('eye') + '</span><div><strong>' + escapeHtml(second.label) + '</strong> is the next risk to watch.</div></div>' : '') +
+                    '<div class="priority-row"><span class="warn-dot" aria-hidden="true">' + iconSvg('link') + '</span><div><strong>One weak pillar</strong> can quietly limit the whole program.</div></div>' +
+                  '</div>' +
+                  '<div class="amber-note">' + escapeHtml(pressureHtml) + '</div>' +
+                '</article>' +
+              '</section>' +
+
+              '<section class="assessment-card resources-path-card">' +
+                '<div class="section-kicker">Recommended path</div>' +
+                '<h2 class="section-title">Start with the kit, then pressure-test the logic.</h2>' +
+                '<p class="assessment-copy">Use the localization kit first to name the constraint, then the case study to see how the Singapore Way logic translated into operating choices.</p>' +
+                '<div class="resource-list resource-list-premium">' +
+                  renderResourcePanel('kit', block.kit.title || 'Localization Kit', block.kit.note, block.kit.url, 'asset_kit_clicked', 'Download PDF') +
+                  renderResourcePanel('study', block.study.title || 'Singapore Case Study', block.study.note, block.study.url, 'asset_case_study_clicked', 'Read Case Study') +
+                '</div>' +
+              '</section>' +
+
+              '<section class="book-banner chapter-banner">' +
+                '<div class="book-icon" aria-hidden="true">' + iconSvg('book') + '</div>' +
+                '<div><div class="chapter-kicker">Book path</div><h3>' + escapeHtml(chapterLabel || 'Continue with the book') + '</h3><p>' + escapeHtml(block.teaser) + '</p></div>' +
+                '<a class="btn primary" href="' + escapeAttr(CONFIG.BOOK_URL) + '" target="_blank" rel="noopener" data-log-click="book_chapter_cta_clicked">Get the Book &rarr;</a>' +
+              '</section>' +
+            '</main>' +
+
+            '<aside class="assessment-sidebar">' +
+              '<article class="assessment-card moves-card moves-card-side">' +
+                '<div class="card-heading"><span class="small-icon move" aria-hidden="true">' + iconSvg('target') + '</span><h2 class="section-title">3 Moves for the Next 90 Days</h2></div>' +
+                '<p class="assessment-copy">Once the story is clear, make the next quarter specific, visible, and hard to ignore.</p>' +
+                '<div class="moves-strip">' + movesHtml + '</div>' +
+              '</article>' +
+            '</aside>' +
+          '</div>' +
+          '<div class="data-note">Your data is secure and confidential.</div>' +
+        '</div>';
+    }
+
+    function renderPillarOverview(pillar, weakestKey){
+      const pct = pillar.score * 5;
+      const status = getPillarStatus(pct);
+      const statusClass = pct < 55 ? 'bad' : (pct < 75 ? 'warn' : 'good');
+      const cardClass = ' pillar--' + escapeAttr(pillar.key) + ' status-' + statusClass + (pillar.key === weakestKey ? ' exposed' : (statusClass === 'warn' ? ' warn' : ''));
+      return '<article class="pillar-card' + cardClass + '">' +
+        '<div style="display:flex;align-items:center;gap:10px;"><span class="pillar-icon" aria-hidden="true">' + getPillarIcon(pillar.key) + '</span><div class="pillar-title">' + escapeHtml(pillar.label) + '</div></div>' +
+        '<div><div class="pillar-score-big">' + pct + '</div><div class="pillar-status ' + statusClass + '">' + escapeHtml(status) + '</div></div>' +
+        '<div class="mini-progress"><span style="width:' + Math.max(4, pct) + '%"></span></div>' +
+      '</article>';
+    }
+
+    function renderMoveTile(move, index){
+      const title = shortenMoveTitle(move);
+      return '<div class="move-tile"><span class="move-number">' + (index + 1) + '</span><div><strong>' + escapeHtml(title) + '</strong><span>' + escapeHtml(move) + '</span></div></div>';
+    }
+
+    function renderResourcePanel(icon, title, note, url, logName, cta){
+      return '<article class="resource-panel"><span class="resource-icon resource-icon-' + escapeAttr(icon) + '" aria-hidden="true">' + iconSvg(icon === 'study' ? 'case' : 'file') + '</span><div><h3>' + escapeHtml(title) + '</h3><p>' + escapeHtml(note) + '</p><a href="' + escapeAttr(url) + '" target="_blank" rel="noopener" data-log-click="' + escapeAttr(logName) + '">' + escapeHtml(cta) + ' <span aria-hidden="true">&rarr;</span></a></div></article>';
+    }
+
+    function summaryRow(label, value, icon){
+      return '<div class="summary-row"><span class="summary-icon summary-icon-' + escapeAttr(icon) + '" aria-hidden="true">' + iconSvg('file') + '</span><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
+    }
+
+    function getPillarIcon(key){
+      const map = { governance:'shield', execution:'bolt', talent:'users', systems:'network', economy:'globe' };
+      return iconSvg(map[key] || 'compass');
+    }
+
+    function iconSvg(name){
+      const attrs = 'class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"';
+      const icons = {
+        download:'<svg ' + attrs + '><path d="M12 3v11"></path><path d="m7 9 5 5 5-5"></path><path d="M5 21h14"></path><path d="M5 17v4"></path><path d="M19 17v4"></path></svg>',
+        spark:'<svg ' + attrs + '><path d="M12 2l1.7 6.1L20 10l-6.3 1.9L12 18l-1.7-6.1L4 10l6.3-1.9L12 2z"></path><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"></path></svg>',
+        compass:'<svg ' + attrs + '><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.2 5-4.8 2 2.2-5 4.8-2z"></path></svg>',
+        shield:'<svg ' + attrs + '><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3z"></path><path d="m9.5 12 1.7 1.7 3.6-4"></path></svg>',
+        bolt:'<svg ' + attrs + '><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7z"></path></svg>',
+        users:'<svg ' + attrs + '><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.8"></path><path d="M16 3.2a4 4 0 0 1 0 7.6"></path></svg>',
+        network:'<svg ' + attrs + '><rect x="3" y="4" width="7" height="6" rx="2"></rect><rect x="14" y="4" width="7" height="6" rx="2"></rect><rect x="8.5" y="15" width="7" height="6" rx="2"></rect><path d="M10 7h4"></path><path d="M7 10l3 5"></path><path d="M17 10l-3 5"></path></svg>',
+        globe:'<svg ' + attrs + '><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9"></path><path d="M12 3c-2.4 2.5-3.6 5.5-3.6 9s1.2 6.5 3.6 9"></path></svg>',
+        check:'<svg ' + attrs + '><path d="m5 13 4 4L19 7"></path></svg>',
+        alert:'<svg ' + attrs + '><path d="M12 3 2.8 20h18.4L12 3z"></path><path d="M12 9v5"></path><path d="M12 18h.01"></path></svg>',
+        eye:'<svg ' + attrs + '><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
+        link:'<svg ' + attrs + '><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"></path></svg>',
+        target:'<svg ' + attrs + '><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M22 2 16 8"></path><path d="M16 2v6h6"></path></svg>',
+        file:'<svg ' + attrs + '><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"></path><path d="M14 3v5h5"></path><path d="M8 13h8"></path><path d="M8 17h6"></path></svg>',
+        case:'<svg ' + attrs + '><path d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"></path><rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M3 12h18"></path><path d="M10 12v2h4v-2"></path></svg>',
+        book:'<svg ' + attrs + '><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15z"></path></svg>'
+      };
+      return icons[name] || icons.compass;
+    }
+
+    function formatResultDate(){
+      return new Date().toLocaleDateString(undefined, { month:'short', year:'numeric' });
+    }
+
+    function getPillarStatus(percent){
+      if (percent >= 90) return 'Excellent';
+      if (percent >= 75) return 'Strong';
+      if (percent >= 60) return 'Good';
+      if (percent >= 45) return 'Needs Focus';
+      return 'Needs Attention';
+    }
+
+    function getWorkingLine(pillar){
+      const map = {
+        governance:'clear leadership and decision foundations are creating confidence.',
+        execution:'momentum is visible and action is happening.',
+        talent:'the team and internal alignment are strong enough to build on.',
+        systems:'coordination and operating rhythm are giving the program structure.',
+        economy:'private-sector momentum has enough credibility to build from.'
+      };
+      return map[pillar.key] || 'this pillar is contributing useful strength.';
+    }
+
+    function shortenMoveTitle(move){
+      const cleaned = String(move || '').replace(/^[0-9]+\.\s*/, '');
+      const beforeDash = cleaned.split(' - ')[0].split(' \u2014 ')[0];
+      const words = beforeDash.split(/\s+/).filter(Boolean);
+      return words.slice(0, 6).join(' ') + (words.length > 6 ? '...' : '');
+    }
+
+    function buildPressureNote(result, urgent){
+      if (!urgent || !urgent.pillar) return '';
+      const urgentPillar = PILLARS.find(function(pillar){ return pillar.key === urgent.pillar; });
+      if (!urgentPillar) return '';
+      if (urgentPillar.key === result.weakest.key) {
+        return 'Your urgent need and your scored bottleneck point to the same place. That makes this the cleanest first move before the next review.';
+      }
+      return 'You named ' + urgent.text.toLowerCase() + ' as the pressure before the next review. The deeper bottleneck in the scoring is ' + result.weakest.label + '. That is common: the pressure is often the symptom; the bottleneck is the cause.';
+    }
+
+    function metric(label, value){
+      return '<div class="metric"><span class="label">' + escapeHtml(label) + '</span><span class="value">' + escapeHtml(value) + '</span></div>';
+    }
+
+    function resourceCard(label, title, note, url, logName, buttonText){
+      return '<div class="resource-card">' +
+        '<div class="label">' + escapeHtml(label) + '</div>' +
+        '<h3>' + escapeHtml(title) + '</h3>' +
+        '<p>' + escapeHtml(note) + '</p>' +
+        '<a class="btn secondary" href="' + escapeAttr(url) + '" target="_blank" rel="noopener" data-log-click="' + escapeAttr(logName) + '">' + escapeHtml(buttonText) + '</a>' +
+      '</div>';
+    }
+
+    function buildPayload(eventType, extra){
+      const result = state.result || null;
+      const base = {
+        event_type:eventType,
+        timestamp_iso_client:new Date().toISOString(),
+        session_id:state.sessionId,
+        flow_stage: extra && extra.flow_stage ? extra.flow_stage : currentFlowStage(),
+        tool_name:'The Singapore Way Transformation Pressure Test',
+        first_name:state.firstName,
+        organization:state.organization,
+        email:state.email,
+        consent:state.consent ? 'Yes' : 'No',
+        page_url:window.location.href,
+        referrer:document.referrer || '',
+        user_agent:navigator.userAgent || ''
+      };
+
+      QUESTIONS.forEach(function(question){
+        const answer = state.answers[question.id];
+        const prefix = 'q' + question.number + '_' + question.id;
+        base[prefix + '_value'] = answer ? answer.value : '';
+        base[prefix + '_text'] = answer ? answer.text : '';
+        if (answer && answer.country_name) base.country_name = answer.country_name;
+        if (answer && answer.country_code) base.country_code = answer.country_code;
+      });
+
+      if (result) {
+        base.score = result.score;
+        base.band_label = result.band.label;
+        base.weakest_pillar = result.weakest.label;
+        base.strongest_pillar = result.strongest.label;
+        base.second_weakest_pillar = result.secondWeakest ? result.secondWeakest.label : '';
+        base.signal_strength = result.signal.label;
+        base.mailchimp_tag_offer = result.offerTag;
+        base.mailchimp_tag_nurture = result.nurtureTag;
+        result.pillars.forEach(function(pillar){
+          base['pillar_' + pillar.key + '_score'] = pillar.score;
+          base['pillar_' + pillar.key + '_raw'] = pillar.raw;
+        });
+      }
+
+      base.answers_json = JSON.stringify(state.answers);
+      return Object.assign(base, extra || {});
+    }
+
+    function currentFlowStage(){
+      const active = Object.keys(screens).find(function(key){ return screens[key].classList.contains('active'); });
+      return active || 'unknown';
+    }
+
+    function logEvent(eventType, extra){
+      logToGoogleSheets(buildPayload(eventType, extra || {}));
+    }
+
+    function logToGoogleSheets(payload){
+      if (!sheetsEnabled()) return;
+      const params = flattenPayload(payload);
+      try {
+        fetch(CONFIG.GOOGLE_SHEETS_WEB_APP_URL, {
+          method:'POST',
+          mode:'no-cors',
+          body:new URLSearchParams(params)
+        }).catch(function(){
+          sendViaHiddenForm(CONFIG.GOOGLE_SHEETS_WEB_APP_URL, params);
+        });
+      } catch (error) {
+        sendViaHiddenForm(CONFIG.GOOGLE_SHEETS_WEB_APP_URL, params);
+      }
+    }
+
+    function submitToMailchimp(payload){
+      if (!mailchimpEnabled()) return Promise.resolve({ skipped:true });
+      return new Promise(function(resolve, reject){
+        const callbackName = 'mc_cb_' + Math.random().toString(36).slice(2);
+        const script = document.createElement('script');
+        let done = false;
+        const timer = setTimeout(function(){ cleanup(); reject(new Error('Mailchimp timed out')); }, 9000);
+
+        function cleanup(){
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          try { delete window[callbackName]; } catch (error) { window[callbackName] = undefined; }
+          try { script.remove(); } catch (error) {}
+        }
+
+        window[callbackName] = function(response){
+          cleanup();
+          resolve(response || { ok:true });
+        };
+
+        const fields = CONFIG.MAILCHIMP_MERGE_FIELDS;
+        const result = state.result || computeResult();
+        const tagIds = [CONFIG.MAILCHIMP_TAG_IDS[result.offerTag], CONFIG.MAILCHIMP_TAG_IDS[result.nurtureTag]].filter(isRealValue);
+        const params = {};
+        params[fields.email || 'EMAIL'] = state.email;
+        params[fields.firstName || 'FNAME'] = state.firstName || '';
+        params[fields.organization || 'ORG'] = state.organization || '';
+        params[fields.weakestPillar || 'WEAKEST'] = result.weakest.label;
+        params[fields.score || 'SCORE'] = String(result.score);
+        if (tagIds.length) params.tags = tagIds.join(',');
+        if (CONFIG.MAILCHIMP_HONEYPOT_FIELD && CONFIG.MAILCHIMP_HONEYPOT_FIELD.indexOf('PASTE_') === -1) {
+          params[CONFIG.MAILCHIMP_HONEYPOT_FIELD] = '';
+        }
+
+        const joiner = CONFIG.MAILCHIMP_POST_JSON_URL.indexOf('?') === -1 ? '?' : '&';
+        script.src = CONFIG.MAILCHIMP_POST_JSON_URL + joiner + new URLSearchParams(params).toString() + '&c=' + callbackName;
+        script.async = true;
+        script.onerror = function(){ cleanup(); reject(new Error('Mailchimp network error')); };
+        document.body.appendChild(script);
+        logToGoogleSheets(Object.assign({}, payload, { event_type:'mailchimp_submitted', mailchimp_tag_ids:tagIds.join(',') }));
+      });
+    }
+
+    function sendViaHiddenForm(url, params){
+      try {
+        const iframeName = 'hidden_submit_' + Math.random().toString(36).slice(2);
+        const iframe = document.createElement('iframe');
+        iframe.name = iframeName;
+        iframe.style.display = 'none';
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+        form.target = iframeName;
+        form.style.display = 'none';
+        Object.keys(params).forEach(function(key){
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = params[key];
+          form.appendChild(input);
+        });
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        form.submit();
+        setTimeout(function(){
+          try { form.remove(); iframe.remove(); } catch (error) {}
+        }, 1800);
+      } catch (error) {}
+    }
+
+    function flattenPayload(payload){
+      const flat = {};
+      Object.keys(payload || {}).forEach(function(key){
+        const value = payload[key];
+        if (value === undefined || value === null) flat[key] = '';
+        else if (typeof value === 'object') flat[key] = JSON.stringify(value);
+        else flat[key] = String(value);
+      });
+      return flat;
+    }
+
+    function sheetsEnabled(){
+      return isRealValue(CONFIG.GOOGLE_SHEETS_WEB_APP_URL) && CONFIG.GOOGLE_SHEETS_WEB_APP_URL.indexOf('PASTE_') === -1;
+    }
+
+    function mailchimpEnabled(){
+      return isRealValue(CONFIG.MAILCHIMP_POST_JSON_URL) && CONFIG.MAILCHIMP_POST_JSON_URL.indexOf('PASTE_') === -1;
+    }
+
+    function isRealValue(value){
+      return !!value && String(value).trim() !== '' && String(value).indexOf('PASTE_') === -1;
+    }
+
+    function normalizeForSearch(value){
+      return String(value || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function parseCountry(raw){
+      const trimmed = String(raw || '').trim();
+      const normalized = normalizeForSearch(trimmed);
+      const paren = trimmed.match(/\(([A-Z]{2})\)\s*$/);
+      const codeFromParen = paren ? paren[1] : '';
+      const withoutParen = normalizeForSearch(trimmed.replace(/\(([A-Z]{2})\)\s*$/, '').trim());
+      const aliasCode = getCountryAliasCode(withoutParen || normalized);
+      let match = null;
+      if (codeFromParen) match = COUNTRIES.find(function(country){ return country.code === codeFromParen; });
+      if (!match && aliasCode) match = COUNTRIES.find(function(country){ return country.code === aliasCode; });
+      if (!match) {
+        match = COUNTRIES.find(function(country){
+          return normalizeForSearch(country.name) === withoutParen || normalizeForSearch(country.code) === normalized;
+        });
+      }
+      if (match) return { name:match.name, code:match.code };
+      return { name:trimmed, code:'' };
+    }
+
+    function isValidEmail(email){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function createSessionId(){
+      const random = Math.random().toString(36).slice(2, 10);
+      return 'tsw_' + Date.now().toString(36) + '_' + random;
+    }
+
+    function clearAutoTimer(){
+      if (state.autoTimer) {
+        clearTimeout(state.autoTimer);
+        state.autoTimer = null;
+      }
+    }
+
+    function sleep(ms){
+      return new Promise(function(resolve){ setTimeout(resolve, ms); });
+    }
+
+    function escapeHtml(value){
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(value){
+      return escapeHtml(value);
+    }
+  })();
+  </script>
+</body>
+</html>
