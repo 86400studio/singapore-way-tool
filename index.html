@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4654,9 +4655,6 @@
       html += '<div class="question-card">';
       html += '<h2 class="question-title">' + escapeHtml(q.prompt) + '</h2>';
       if (q.note) html += '<p class="micro-copy">' + escapeHtml(q.note) + '</p>';
-      const mediaUrl = QUESTION_IMAGES[q.id] || CONFIG.HERO_IMAGE_URL;
-      html += '<div class="question-media"><img src="' + escapeAttr(mediaUrl) + '" alt="" loading="lazy" /></div>';
-
       if (q.type === 'country') {
         html += '<div class="form-grid country-form">';
         html += '<div class="country-picker" data-country-picker>';
